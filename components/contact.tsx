@@ -1,83 +1,47 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Github,
-  Linkedin,
-  Twitter,
-  Send,
-} from "lucide-react";
+import { Mail, Phone, MapPin, Github, Linkedin, Send } from "lucide-react";
+import { contactInfo, socialLinks } from "@/lib/portfolio-data";
 
 interface ContactLink {
   icon: React.ReactNode;
   label: string;
   value: string;
   href: string;
-  isExternal?: boolean;
 }
 
-const contactLinks: ContactLink[] = [
-  {
-    icon: <Mail className="w-6 h-6" />,
-    label: "Email",
-    value: "sadit@example.com",
-    href: "mailto:sadit@example.com",
-  },
-  {
-    icon: <Phone className="w-6 h-6" />,
-    label: "Phone",
-    value: "+1 (555) 123-4567",
-    href: "tel:+15551234567",
-  },
-  {
-    icon: <MapPin className="w-6 h-6" />,
-    label: "Location",
-    value: "San Francisco, CA",
-    href: "#",
-  },
-];
-
-const socialLinks = [
-  {
-    icon: Github,
-    label: "GitHub",
-    href: "https://github.com/sadithrasaili",
-    color: "hover:text-foreground",
-  },
-  {
-    icon: Linkedin,
-    label: "LinkedIn",
-    href: "https://linkedin.com/in/sadithrasaili",
-    color: "hover:text-blue-500",
-  },
-  {
-    icon: Twitter,
-    label: "Twitter",
-    href: "https://twitter.com/sadithrasaili",
-    color: "hover:text-sky-500",
-  },
-  {
-    icon: Mail,
-    label: "Email",
-    href: "mailto:sadit@example.com",
-    color: "hover:text-accent",
-  },
-];
-
 export default function Contact() {
+  const contactLinks: ContactLink[] = [
+    {
+      icon: <Mail className="w-6 h-6" />,
+      label: "Email",
+      value: contactInfo.email,
+      href: `mailto:${contactInfo.email}`,
+    },
+    {
+      icon: <Phone className="w-6 h-6" />,
+      label: "Phone",
+      value: contactInfo.phone,
+      href: `tel:${contactInfo.phone}`,
+    },
+    {
+      icon: <MapPin className="w-6 h-6" />,
+      label: "Location",
+      value: contactInfo.location,
+      href: "#",
+    },
+  ];
+
+  const socialIcons: Record<string, React.ReactNode> = {
+    github: <Github className="w-5 h-5" />,
+    linkedin: <Linkedin className="w-5 h-5" />,
+    mail: <Mail className="w-5 h-5" />,
+  };
+
   const [formState, setFormState] = useState({
     name: "",
     email: "",
@@ -85,13 +49,9 @@ export default function Contact() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<
-    "idle" | "success" | "error"
-  >("idle");
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
@@ -102,58 +62,47 @@ export default function Contact() {
     setSubmitStatus("idle");
 
     try {
-      // Simulated form submission
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setSubmitStatus("success");
-      setFormState({ name: "", email: "", subject: "", message: "" });
-      setTimeout(() => setSubmitStatus("idle"), 3000);
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formState),
+      });
+
+      if (response.ok) {
+        setSubmitStatus("success");
+        setFormState({ name: "", email: "", subject: "", message: "" });
+      } else {
+        setSubmitStatus("error");
+      }
     } catch (error) {
       setSubmitStatus("error");
-      setTimeout(() => setSubmitStatus("idle"), 3000);
     } finally {
       setIsSubmitting(false);
+      setTimeout(() => setSubmitStatus("idle"), 3000);
     }
   };
 
   return (
     <section id="contact" className="py-24 relative bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
         <div className="max-w-2xl mb-16">
           <h2 className="text-4xl lg:text-5xl font-bold mb-4 text-balance">
-            Get in{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
-              Touch
-            </span>
+            Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">Touch</span>
           </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            Have a project in mind or want to collaborate? I'd love to hear from
-            you. Reach out through any of the channels below.
-          </p>
+          <p className="text-lg text-muted-foreground leading-relaxed">{contactInfo.bio}</p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8 mb-16">
-          {/* Contact Information */}
           <div className="lg:col-span-1 space-y-4">
             {contactLinks.map((link, index) => (
-              <a
-                key={index}
-                href={link.href}
-                className="group cursor-pointer block"
-              >
+              <a key={index} href={link.href} className="group cursor-pointer block">
                 <Card className="h-full hover:shadow-lg transition-all duration-300 border-border/50 bg-card/50 backdrop-blur-sm hover:border-accent/50">
                   <CardContent className="pt-6">
                     <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-lg bg-accent/10 text-accent group-hover:bg-accent/20 transition-colors">
-                        {link.icon}
-                      </div>
+                      <div className="p-3 rounded-lg bg-accent/10 text-accent group-hover:bg-accent/20 transition-colors">{link.icon}</div>
                       <div>
-                        <p className="font-semibold text-sm text-muted-foreground mb-1">
-                          {link.label}
-                        </p>
-                        <p className="text-foreground font-medium group-hover:text-accent transition-colors cursor-pointer">
-                          {link.value}
-                        </p>
+                        <p className="font-semibold text-sm text-muted-foreground mb-1">{link.label}</p>
+                        <p className="text-foreground font-medium group-hover:text-accent transition-colors cursor-pointer">{link.value}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -161,45 +110,35 @@ export default function Contact() {
               </a>
             ))}
 
-            {/* Social Links */}
             <div className="pt-8">
               <h3 className="font-semibold mb-4">Follow Me</h3>
               <div className="flex gap-4">
-                {socialLinks.map((social, index) => {
-                  const Icon = social.icon;
-                  return (
-                    <a
-                      key={index}
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`p-3 rounded-lg bg-muted hover:bg-muted/80 text-muted-foreground ${social.color} transition-colors duration-300 cursor-pointer hover:shadow-lg`}
-                      aria-label={social.label}
-                    >
-                      <Icon className="w-5 h-5" />
-                    </a>
-                  );
-                })}
+                {socialLinks.map((social, index) => (
+                  <a
+                    key={index}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 rounded-lg bg-muted hover:bg-muted/80 text-muted-foreground hover:text-accent transition-colors duration-300 cursor-pointer hover:shadow-lg"
+                    aria-label={social.name}
+                  >
+                    {socialIcons[social.icon] || <Mail className="w-5 h-5" />}
+                  </a>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Contact Form */}
           <Card className="lg:col-span-2 border-border/50 bg-card/50 backdrop-blur-sm">
             <CardHeader>
               <CardTitle>Send Me a Message</CardTitle>
-              <CardDescription>
-                I'll get back to you as soon as possible
-              </CardDescription>
+              <CardDescription>I'll get back to you as soon as possible</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label
-                      htmlFor="name"
-                      className="text-sm font-medium text-foreground"
-                    >
+                    <label htmlFor="name" className="text-sm font-medium text-foreground">
                       Name
                     </label>
                     <input
@@ -214,10 +153,7 @@ export default function Contact() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label
-                      htmlFor="email"
-                      className="text-sm font-medium text-foreground"
-                    >
+                    <label htmlFor="email" className="text-sm font-medium text-foreground">
                       Email
                     </label>
                     <input
@@ -234,10 +170,7 @@ export default function Contact() {
                 </div>
 
                 <div className="space-y-2">
-                  <label
-                    htmlFor="subject"
-                    className="text-sm font-medium text-foreground"
-                  >
+                  <label htmlFor="subject" className="text-sm font-medium text-foreground">
                     Subject
                   </label>
                   <input
@@ -253,10 +186,7 @@ export default function Contact() {
                 </div>
 
                 <div className="space-y-2">
-                  <label
-                    htmlFor="message"
-                    className="text-sm font-medium text-foreground"
-                  >
+                  <label htmlFor="message" className="text-sm font-medium text-foreground">
                     Message
                   </label>
                   <textarea
@@ -273,14 +203,14 @@ export default function Contact() {
 
                 {submitStatus === "success" && (
                   <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 text-green-600 flex items-center gap-2">
-                    <span className="text-lg">✓</span>
+                    <span>Success</span>
                     Message sent successfully! I'll be in touch soon.
                   </div>
                 )}
 
                 {submitStatus === "error" && (
                   <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-600 flex items-center gap-2">
-                    <span className="text-lg">✕</span>
+                    <span>Error</span>
                     Something went wrong. Please try again.
                   </div>
                 )}
