@@ -1,6 +1,6 @@
 "use client";
 
-import { PenTool, Calendar, ArrowUpRight } from "lucide-react";
+import { Calendar, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import { blogPosts as allBlogPosts } from "@/lib/portfolio-data";
 
@@ -26,10 +26,7 @@ export default function Blog() {
           <h2 className="text-4xl lg:text-5xl font-bold mb-4">
             Latest <span className="text-accent">Blog Posts</span>
           </h2>
-          <p className="text-muted-foreground leading-relaxed">
-            Thoughts on software development, machine learning, and building
-            scalable systems.
-          </p>
+          <p className="text-muted-foreground leading-relaxed">Thoughts on software development, machine learning, and building scalable systems.</p>
         </div>
 
         {/* Blog Grid */}
@@ -46,25 +43,18 @@ export default function Blog() {
               {/* Header */}
               <div className="flex items-start justify-between gap-4 mb-3">
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-foreground group-hover:text-accent transition-colors mb-2">
-                    {post.title}
-                  </h3>
+                  <h3 className="text-lg font-semibold text-foreground group-hover:text-accent transition-colors mb-2">{post.title}</h3>
                 </div>
                 <ArrowUpRight className="w-5 h-5 text-accent/60 group-hover:text-accent opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all" />
               </div>
 
               {/* Content */}
-              <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                {post.excerpt}
-              </p>
+              <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{post.excerpt}</p>
 
               {/* Tags */}
               <div className="flex flex-wrap gap-2 mb-4">
                 {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-1 text-xs rounded-full bg-accent/10 text-accent/80 border border-accent/20 group-hover:border-accent/50 transition-colors"
-                  >
+                  <span key={tag} className="px-2 py-1 text-xs rounded-full bg-accent/10 text-accent/80 border border-accent/20 group-hover:border-accent/50 transition-colors">
                     {tag}
                   </span>
                 ))}

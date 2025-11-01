@@ -104,9 +104,7 @@ export default function Projects() {
     return resolvedImages[project.id] || [];
   };
 
-  if (loading) {
-    return <section className="py-24">Loading projects...</section>;
-  }
+  if (loading) return <section className="py-24">Loading projects...</section>;
 
   return (
     <>
@@ -215,8 +213,6 @@ export default function Projects() {
             <h3 className="text-xl font-semibold">Other Notable Projects</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {other.map((project, index) => {
-                const projectImages = getProjectImages(project);
-                const currentIdx = currentImageIndices[project.id] || 0;
                 return (
                   <Card
                     key={project.id}
