@@ -35,15 +35,13 @@ export default function Projects() {
   const [expandedProjectId, setExpandedProjectId] = useState<number | null>(null);
   const [expandedImageIndex, setExpandedImageIndex] = useState(0);
   const [currentImageIndices, setCurrentImageIndices] = useState<Record<number, number>>({});
-  const [resolvedImages, setResolvedImages] = useState<Record<number, string[]>>({});
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndices((prev) => {
         const updated = { ...prev };
         for (const project of allProjects) {
-          const projectImages = resolvedImages[project.id] || [];
+          const projectImages = Array.isArray(project.images) ? project.images : [];
           if (projectImages.length > 1) {
             updated[project.id] = ((prev[project.id] || 0) + 1) % projectImages.length;
           }
@@ -53,34 +51,6 @@ export default function Projects() {
     }, 5000); // Change image every 5 seconds
 
     return () => clearInterval(interval);
-  }, [resolvedImages]);
-
-  useEffect(() => {
-    const loadFolderImages = async () => {
-      const resolved: Record<number, string[]> = {};
-
-      for (const project of allProjects) {
-        if (Array.isArray(project.images)) {
-          resolved[project.id] = project.images;
-        } else if (project.images && typeof project.images === "object" && "type" in project.images) {
-          if (project.images.type === "folder") {
-            try {
-              const response = await fetch(`/api/images?path=${project.images.path}`);
-              const data = await response.json();
-              resolved[project.id] = data.images || [];
-            } catch (error) {
-              console.error(`Failed to load images for project ${project.id}:`, error);
-              resolved[project.id] = [];
-            }
-          }
-        }
-      }
-
-      setResolvedImages(resolved);
-      setLoading(false);
-    };
-
-    loadFolderImages();
   }, []);
 
   const featured = allProjects.filter((p) => p.featured);
@@ -101,10 +71,8 @@ export default function Projects() {
   };
 
   const getProjectImages = (project: (typeof allProjects)[0]): string[] => {
-    return resolvedImages[project.id] || [];
+    return Array.isArray(project.images) ? project.images : [];
   };
-
-  if (loading) return <section className="py-24">Loading projects...</section>;
 
   return (
     <>
