@@ -1,12 +1,10 @@
 "use client";
 
-import type React from "react";
-
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 
 interface ImageLightboxProps {
-  images: string[]; // Changed from single src to images array
+  images: string[];
   alt: string;
   isOpen: boolean;
   onClose: () => void;
@@ -16,6 +14,7 @@ interface ImageLightboxProps {
 export default function ImageLightbox({ images, alt, isOpen, onClose, initialIndex = 0 }: ImageLightboxProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [touchStart, setTouchStart] = useState(0);
+  const [historyPushed, setHistoryPushed] = useState(false);
 
   const goToNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % images.length);
@@ -41,6 +40,32 @@ export default function ImageLightbox({ images, alt, isOpen, onClose, initialInd
       }
     }
   };
+
+  // Handle browser history for back button
+  useEffect(() => {
+    if (!isOpen) {
+      setHistoryPushed(false);
+      return;
+    }
+
+    // Push a new history state when lightbox opens
+    if (!historyPushed) {
+      window.history.pushState({ lightboxOpen: true }, "");
+      setHistoryPushed(true);
+    }
+
+    const handlePopState = (e: PopStateEvent) => {
+      if (isOpen) {
+        onClose();
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [isOpen, onClose, historyPushed]);
 
   useEffect(() => {
     if (!isOpen) return;

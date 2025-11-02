@@ -1,3 +1,5 @@
+import { Project, EducationItem, Certification, BlogPost, ContactInfo, SkillCategory } from "./types";
+
 // HERO INFO
 export const heroInfo = {
   name: "Sadit Rasaili",
@@ -8,17 +10,7 @@ export const heroInfo = {
 };
 
 // PROJECTS
-export interface Project {
-  id: number;
-  title: string;
-  description: string;
-  longDescription: string;
-  technologies: string[];
-  images: string[] | { type: "folder"; path: string };
-  link?: string;
-  github?: string;
-  featured: boolean;
-}
+
 export const projects: Project[] = [
   {
     id: 1,
@@ -73,14 +65,7 @@ export const projects: Project[] = [
 ];
 
 // EDUCATION
-export interface EducationItem {
-  school: string;
-  degree: string;
-  field: string;
-  period: string;
-  location: string;
-  achievements: string[];
-}
+
 export const education: EducationItem[] = [
   {
     school: "Kathmandu University",
@@ -100,36 +85,8 @@ export const education: EducationItem[] = [
   },
 ];
 
-// CERTIFICATIONS
-export interface Certification {
-  name: string;
-  issuer: string;
-  year: number;
-}
-export const certifications: Certification[] = [
-  {
-    name: "Full Stack Web Development",
-    issuer: "Udemy",
-    year: 2023,
-  },
-  {
-    name: "Machine Learning Specialization",
-    issuer: "Coursera",
-    year: 2023,
-  },
-];
-
 // BLOG POSTS
-export interface BlogPost {
-  id: number;
-  title: string;
-  excerpt: string;
-  date: string;
-  readTime: string;
-  tags: string[];
-  slug: string;
-  link?: string;
-}
+
 export const blogPosts: BlogPost[] = [
   {
     id: 1,
@@ -152,14 +109,6 @@ export const blogPosts: BlogPost[] = [
     // link: "https://medium.com/@saditrasaili/imgrep-ml",
   },
 ];
-
-// SKILLS
-export interface SkillCategory {
-  category: string;
-  description: string;
-  skills: string[];
-  icon: string;
-}
 
 export const skillCategories: SkillCategory[] = [
   {
@@ -218,12 +167,6 @@ export const socialLinks: SocialLink[] = [
   },
 ];
 
-export interface ContactInfo {
-  email: string;
-  phone: string;
-  location: string;
-  bio: string;
-}
 export const contactInfo: ContactInfo = {
   email: "saditrasaili063@gmail.com",
   phone: "+977 9763610010",
@@ -246,3 +189,18 @@ export const footerInfo = {
   tagline: "Full stack developer passionate about building amazing products",
   year: new Date().getFullYear(),
 };
+
+export const certifications: Certification[] = [
+  {
+    name: "Intro to Programming",
+    issuer: "Kaggle",
+    year: 2024,
+    images: ["certifications/SADIT_RASAILI - Intro to Programming.png"],
+  },
+  {
+    name: "Python",
+    issuer: "Kaggle",
+    year: 2024,
+    images: ["certifications/SADIT_RASAILI - Python.png"],
+  },
+];

@@ -1,8 +1,8 @@
 "use client";
 
+import { education } from "@/lib/portfolio-data";
 import { GraduationCap, Calendar, MapPin, Award } from "lucide-react";
 import { useState } from "react";
-import { education, certifications } from "@/lib/portfolio-data";
 
 export default function Education() {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
@@ -12,15 +12,12 @@ export default function Education() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="max-w-2xl mb-16 animate-fade-in">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-            Education & <span className="text-accent">Certifications</span>
-          </h2>
-          <p className="text-muted-foreground leading-relaxed">Academic background and professional certifications that shaped my expertise.</p>
+          <h2 className="text-4xl lg:text-5xl font-bold mb-4">Education</h2>
+          <p className="text-muted-foreground leading-relaxed">Academic background that shaped my expertise.</p>
         </div>
 
         {/* Vertical Timeline */}
-        <div className="space-y-6 mb-20">
-          <h3 className="text-xl font-semibold">Degrees</h3>
+        <div className="space-y-6">
           <div className="space-y-4">
             {education.map((item, index) => (
               <div key={index} className="flex gap-4 animate-float-up" style={{ animationDelay: `${index * 0.1}s` }}>
@@ -68,29 +65,6 @@ export default function Education() {
                       </div>
                     )}
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Certifications */}
-        <div className="space-y-6">
-          <h3 className="text-xl font-semibold">Professional Certifications</h3>
-          <div className="grid md:grid-cols-2 gap-4">
-            {certifications.map((cert, index) => (
-              <div
-                key={index}
-                className="bg-card/50 border border-border/50 rounded-lg p-4 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all group cursor-default animate-float-up"
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <div className="flex items-start gap-3">
-                  <Award className="w-5 h-5 text-accent flex-shrink-0 mt-1" />
-                  <div className="flex-1">
-                    <p className="font-semibold text-sm text-foreground group-hover:text-accent transition-colors">{cert.name}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{cert.issuer}</p>
-                  </div>
-                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-accent/10 text-accent whitespace-nowrap">{cert.year}</span>
                 </div>
               </div>
             ))}
