@@ -54,7 +54,7 @@ export default function ImageLightbox({ images, alt, isOpen, onClose, initialInd
       setHistoryPushed(true);
     }
 
-    const handlePopState = (e: PopStateEvent) => {
+    const handlePopState = (_e: PopStateEvent) => {
       if (isOpen) {
         onClose();
       }
