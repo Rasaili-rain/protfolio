@@ -1,6 +1,5 @@
 import { Project, EducationItem, Certification, BlogPost, ContactInfo, SkillCategory, SocialLink } from "./types";
 
-// HERO INFO
 export const heroInfo = {
   name: "Sadit Rasaili",
   title: "Full Stack Developer • ML Enthusiast",
@@ -8,8 +7,6 @@ export const heroInfo = {
   bio: "I'm a Computer Engineering student passionate about crafting efficient full-stack solutions and exploring applied machine learning. I enjoy turning complex problems into elegant software.",
   resumeUrl: "cv-sadit.pdf",
 };
-
-// PROJECTS
 
 export const projects: Project[] = [
   {
@@ -64,8 +61,6 @@ export const projects: Project[] = [
   },
 ];
 
-// EDUCATION
-
 export const education: EducationItem[] = [
   {
     school: "Kathmandu University",
@@ -84,8 +79,6 @@ export const education: EducationItem[] = [
     achievements: ["Graduated with A+"],
   },
 ];
-
-// BLOG POSTS
 
 export const blogPosts: BlogPost[] = [
   {
@@ -168,7 +161,6 @@ export const contactInfo: ContactInfo = {
   bio: "Have a project in mind or want to collaborate? I'd love to hear from you. Reach out through any of the channels below.",
 };
 
-// NAVIGATION - Edit navigation text here
 export const navigationItems = [
   { label: "Skills", href: "#skills" },
   { label: "Projects", href: "#projects" },
@@ -177,7 +169,6 @@ export const navigationItems = [
   { label: "Contact", href: "#contact" },
 ];
 
-// FOOTER - Edit footer information here
 export const footerInfo = {
   name: "Sadit.Dev",
   tagline: "Full stack developer passionate about building amazing products",
