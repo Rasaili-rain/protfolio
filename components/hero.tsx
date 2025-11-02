@@ -25,8 +25,8 @@ export default function Hero() {
 
   const handleDownloadCV = () => {
     const link = document.createElement("a");
-    link.href = "/resume.pdf";
-    link.download = "Sadit_Rasaili_Resume.pdf";
+    link.href = heroInfo.resumeUrl;
+    link.download = heroInfo.name + ".pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

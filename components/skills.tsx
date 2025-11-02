@@ -2,13 +2,7 @@
 
 import type React from "react";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { skillCategories } from "@/lib/portfolio-data";
 import { Code, Server, Brain, Zap, Database, Wrench } from "lucide-react";
 
@@ -30,10 +24,7 @@ export default function Skills() {
           <h2 className="text-4xl lg:text-5xl font-bold mb-4">
             Skills & <span className="text-accent">Expertise</span>
           </h2>
-          <p className="text-muted-foreground leading-relaxed">
-            Technologies and tools I've mastered throughout my development
-            journey.
-          </p>
+          <p className="text-muted-foreground leading-relaxed">Technologies and tools I've mastered throughout my development journey.</p>
         </div>
 
         {/* Skills Grid */}
@@ -47,16 +38,10 @@ export default function Skills() {
               <CardHeader>
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <CardTitle className="text-lg group-hover:text-accent transition-colors">
-                      {category.category}
-                    </CardTitle>
-                    <CardDescription className="text-xs mt-1">
-                      {category.description}
-                    </CardDescription>
+                    <CardTitle className="text-lg group-hover:text-accent transition-colors">{category.category}</CardTitle>
+                    <CardDescription className="text-xs mt-1">{category.description}</CardDescription>
                   </div>
-                  <div className="p-2 rounded-lg bg-accent/10 text-accent group-hover:bg-accent/20 transition-colors shrink-0">
-                    {iconMap[category.icon] || <Code className="w-5 h-5" />}
-                  </div>
+                  <div className="p-2 rounded-lg bg-accent/10 text-accent group-hover:bg-accent/20 transition-colors shrink-0">{iconMap[category.icon] || <Code className="w-5 h-5" />}</div>
                 </div>
               </CardHeader>
               <CardContent>

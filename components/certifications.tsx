@@ -6,8 +6,6 @@ import ImageLightbox from "./image-lightbox";
 import { certifications } from "@/lib/portfolio-data";
 import { Certification } from "@/lib/types";
 
-// Sample certifications data
-
 export default function Certifications() {
   const [selectedCert, setSelectedCert] = useState<{ images: string[]; name: string } | null>(null);
 

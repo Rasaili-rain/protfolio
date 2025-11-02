@@ -1,4 +1,4 @@
-import { Project, EducationItem, Certification, BlogPost, ContactInfo, SkillCategory } from "./types";
+import { Project, EducationItem, Certification, BlogPost, ContactInfo, SkillCategory, SocialLink } from "./types";
 
 // HERO INFO
 export const heroInfo = {
@@ -6,7 +6,7 @@ export const heroInfo = {
   title: "Full Stack Developer • ML Enthusiast",
   subtitle: "Building intelligent, high-performance systems.",
   bio: "I'm a Computer Engineering student passionate about crafting efficient full-stack solutions and exploring applied machine learning. I enjoy turning complex problems into elegant software.",
-  resumeUrl: "/cv-sadit.pdf",
+  resumeUrl: "cv-sadit.pdf",
 };
 
 // PROJECTS
@@ -143,12 +143,6 @@ export const skillCategories: SkillCategory[] = [
   },
 ];
 
-// SOCIAL LINKS
-export interface SocialLink {
-  name: string;
-  url: string;
-  icon: string;
-}
 export const socialLinks: SocialLink[] = [
   {
     name: "GitHub",

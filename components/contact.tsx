@@ -13,7 +13,6 @@ interface ContactLink {
   value: string;
   href: string;
 }
-
 export default function Contact() {
   const contactLinks: ContactLink[] = [
     {

@@ -10,7 +10,6 @@ interface NavLink {
   href: string;
   icon: React.ReactNode;
 }
-
 const navIconMap: Record<string, React.ReactNode> = {
   Skills: <Code2 className="w-4 h-4" />,
   Projects: <Briefcase className="w-4 h-4" />,

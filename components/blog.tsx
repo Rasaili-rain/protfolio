@@ -3,17 +3,7 @@
 import { Calendar, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import { blogPosts as allBlogPosts } from "@/lib/portfolio-data";
-
-interface BlogPost {
-  id: number;
-  title: string;
-  excerpt: string;
-  date: string;
-  readTime: string;
-  tags: string[];
-  slug: string;
-  link?: string;
-}
+import { BlogPost } from "@/lib/types";
 
 export default function Blog() {
   const [posts] = useState<BlogPost[]>(allBlogPosts);
