@@ -2,57 +2,67 @@
 
 import type React from "react";
 import { useState, useEffect } from "react";
-import { Menu, X, Home, Code2, Briefcase, BookOpen, Mail, PenTool } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Menu, X, Code2, Briefcase, BookOpen, Mail, Home } from "lucide-react";
 
 interface NavLink {
   name: string;
   href: string;
   icon: React.ReactNode;
 }
+
 const navIconMap: Record<string, React.ReactNode> = {
+  Home : <Home className="w-4 h-4"/>,
   Skills: <Code2 className="w-4 h-4" />,
   Projects: <Briefcase className="w-4 h-4" />,
-  Blog: <PenTool className="w-4 h-4" />,
   Education: <BookOpen className="w-4 h-4" />,
   Contact: <Mail className="w-4 h-4" />,
+  // Blog: <PenTool className="w-4 h-4" />,
 };
 
 export default function Navigation() {
   const navLinks: NavLink[] = [
-    { name: "Home", href: "#home", icon: <Home className="w-4 h-4" /> },
+    { name: "Home", href: "#home", icon: navIconMap["Home"] },
     { name: "Skills", href: "#skills", icon: navIconMap["Skills"] },
     { name: "Projects", href: "#projects", icon: navIconMap["Projects"] },
-    { name: "Blog", href: "#blog", icon: navIconMap["Blog"] },
     { name: "Education", href: "#education", icon: navIconMap["Education"] },
     { name: "Contact", href: "#contact", icon: navIconMap["Contact"] },
+    // { name: "Blog", href: "#blog", icon: navIconMap["Blog"] },
   ];
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("skills");
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    navLinks.forEach((link) => {
+      const section = document.querySelector(link.href);
+      if (section) observer.observe(section);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   const handleNavClick = (href: string) => {
     setIsOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    const el = document.querySelector(href);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-background/80 backdrop-blur-md border-b border-border/50" : "bg-transparent"}`}>
+    <nav className="fixed top-0 w-full z-50 bg-background/10 backdrop-blur-md border-b border-border/20 transition-all duration-300">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <a href="#" className="flex items-center gap-2 font-bold text-lg text-accent hover:opacity-80 transition-opacity">
+          <a href="#" className="flex items-center gap-2 font-bold text-lg text-accent">
             <Code2 className="w-5 h-5" />
             Sadit
           </a>
@@ -62,21 +72,19 @@ export default function Navigation() {
               <button
                 key={link.name}
                 onClick={() => handleNavClick(link.href)}
-                className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-accent hover:bg-muted/50 rounded-lg transition-all duration-200 flex items-center gap-2 cursor-pointer group"
+                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 cursor-pointer group
+                  ${activeSection === link.href.replace("#", "")
+                    ? "text-accent bg-muted/50"
+                    : "text-muted-foreground hover:text-accent hover:bg-muted/30"
+                  }`}
               >
-                <span className="group-hover:text-accent transition-colors">{link.icon}</span>
+                <span>{link.icon}</span>
                 {link.name}
               </button>
             ))}
           </div>
 
-          <div className="hidden md:block">
-            <Button onClick={() => handleNavClick("#contact")} className="bg-accent hover:bg-accent/90 text-background font-medium cursor-pointer btn-hover-safe">
-              Contact
-            </Button>
-          </div>
-
-          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 hover:bg-muted rounded-lg transition-colors cursor-pointer" aria-label="Toggle menu">
+          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 hover:bg-muted rounded-lg">
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
@@ -87,17 +95,16 @@ export default function Navigation() {
               <button
                 key={link.name}
                 onClick={() => handleNavClick(link.href)}
-                className="block w-full text-left px-4 py-2 text-sm font-medium text-muted-foreground hover:text-accent hover:bg-muted rounded-lg transition-colors flex items-center gap-2 cursor-pointer"
+                className={`block w-full px-4 py-2 text-left text-sm font-medium rounded-lg flex items-center gap-2
+                  ${activeSection === link.href.replace("#", "")
+                    ? "text-accent bg-muted/50"
+                    : "text-muted-foreground hover:text-accent hover:bg-muted"
+                  }`}
               >
                 {link.icon}
                 {link.name}
               </button>
             ))}
-            <div className="pt-2">
-              <Button onClick={() => handleNavClick("#contact")} className="w-full bg-accent hover:bg-accent/90 text-background cursor-pointer">
-                Contact
-              </Button>
-            </div>
           </div>
         )}
       </div>
