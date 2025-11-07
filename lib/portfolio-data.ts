@@ -188,4 +188,10 @@ export const certifications: Certification[] = [
     year: 2024,
     images: ["certifications/SADIT_RASAILI - Python.png"],
   },
+    {
+    name: "Intro To Machine Learning",
+    issuer: "Kaggle",
+    year: 2025,
+    images: ["certifications/SADIT_RASAILI - Intro to Machine Learning.png"],
+  },
 ];
