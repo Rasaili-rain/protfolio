@@ -10,16 +10,6 @@ export interface Project {
   featured: boolean;
 }
 
-export interface BlogPost {
-  id: number;
-  title: string;
-  excerpt: string;
-  date: string;
-  readTime: string;
-  tags: string[];
-  slug: string;
-  link?: string;
-}
 
 export interface ContactInfo {
   email: string;
@@ -33,6 +23,7 @@ export interface Certification {
   issuer: string;
   year: number;
   images?: string[];
+  link? :string;
 }
 
 export interface EducationItem {

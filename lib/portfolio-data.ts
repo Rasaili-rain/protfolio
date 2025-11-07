@@ -1,4 +1,4 @@
-import { Project, EducationItem, Certification, BlogPost, ContactInfo, SkillCategory, SocialLink } from "./types";
+import { Project, EducationItem, Certification, ContactInfo, SkillCategory, SocialLink } from "./types";
 
 export const heroInfo = {
   name: "Sadit Rasaili",
@@ -80,28 +80,6 @@ export const education: EducationItem[] = [
   },
 ];
 
-export const blogPosts: BlogPost[] = [
-  {
-    id: 1,
-    title: "Building Real-Time Systems in Rust",
-    excerpt: "A breakdown of concurrency and performance strategies for real-time apps using Rust and WebSockets.",
-    date: "Apr 10, 2025",
-    readTime: "7 min read",
-    tags: ["Rust", "WebSockets", "Backend"],
-    slug: "real-time-systems-rust",
-    // link: "https://medium.com/@saditrasaili/real-time-rust",
-  },
-  {
-    id: 2,
-    title: "Designing Smart Image Search Models",
-    excerpt: "How I built ImGrep — an AI-driven image search platform using feature extraction and similarity metrics.",
-    date: "Mar 28, 2025",
-    readTime: "8 min read",
-    tags: ["AI", "Computer Vision", "ML"],
-    slug: "smart-image-search",
-    // link: "https://medium.com/@saditrasaili/imgrep-ml",
-  },
-];
 
 export const skillCategories: SkillCategory[] = [
   {
@@ -188,16 +166,23 @@ export const certifications: Certification[] = [
     year: 2024,
     images: ["certifications/SADIT_RASAILI - Python.png"],
   },
-    {
+  {
     name: "Intro To Machine Learning",
     issuer: "Kaggle",
     year: 2025,
     images: ["certifications/SADIT_RASAILI - Intro to Machine Learning.png"],
   },
-      {
+  {
     name: "Intro To SQL",
     issuer: "Kaggle",
     year: 2025,
     images: ["certifications/SADIT_RASAILI - Intro to SQL.png"],
+  },
+    {
+    name: "React Basic",
+    issuer: "Hacker Rank",
+    year: 2025,
+    images: ["certifications/react-basic.png"],
+    link:"https://www.hackerrank.com/certificates/533c4a4aa6aa"
   },
 ];

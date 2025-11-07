@@ -2,7 +2,7 @@
 
 import type React from "react";
 import { useState, useEffect } from "react";
-import { Menu, X, Code2, Briefcase, BookOpen, Mail, Home } from "lucide-react";
+import { Menu, X, Code2, Briefcase, BookOpen, Mail, Home, Award } from "lucide-react";
 
 interface NavLink {
   name: string;
@@ -15,6 +15,7 @@ const navIconMap: Record<string, React.ReactNode> = {
   Skills: <Code2 className="w-4 h-4" />,
   Projects: <Briefcase className="w-4 h-4" />,
   Education: <BookOpen className="w-4 h-4" />,
+  Certifications: <Award className="w-4 h-4"/>,
   Contact: <Mail className="w-4 h-4" />,
   // Blog: <PenTool className="w-4 h-4" />,
 };
@@ -25,6 +26,7 @@ export default function Navigation() {
     { name: "Skills", href: "#skills", icon: navIconMap["Skills"] },
     { name: "Projects", href: "#projects", icon: navIconMap["Projects"] },
     { name: "Education", href: "#education", icon: navIconMap["Education"] },
+    { name: "Certifications", href: "#certifications", icon: navIconMap["Certifications"] },
     { name: "Contact", href: "#contact", icon: navIconMap["Contact"] },
     // { name: "Blog", href: "#blog", icon: navIconMap["Blog"] },
   ];

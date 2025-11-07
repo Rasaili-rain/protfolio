@@ -10,13 +10,14 @@ export default function Certifications() {
   const [selectedCert, setSelectedCert] = useState<{ images: string[]; name: string } | null>(null);
 
   const handleCertClick = (cert: Certification) => {
-    if (cert.images && cert.images.length > 0) {
-      setSelectedCert({ images: cert.images, name: cert.name });
-    }
+    if (cert.images && cert.images.length > 0) setSelectedCert({ images: cert.images, name: cert.name });
   };
 
-  const handleCloseLightbox = () => {
-    setSelectedCert(null);
+  const handleCloseLightbox = () => setSelectedCert(null);
+
+  const handleLinkClick = (link: string | undefined, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (link) window.open(link, "_blank");
   };
 
   return (
@@ -46,7 +47,7 @@ export default function Certifications() {
                 <div className="flex-1">
                   <div className="flex items-start justify-between gap-2">
                     <p className="font-semibold text-sm text-foreground group-hover:text-accent transition-colors">{cert.name}</p>
-                    {cert.images && cert.images.length > 0 && <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent transition-colors flex-shrink-0" />}
+                    {cert.link && <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent transition-colors flex-shrink-0" onClick={(e) => handleLinkClick(cert.link, e)} />}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">{cert.issuer}</p>
                   {cert.images && cert.images.length > 0 && <p className="text-xs text-accent/70 mt-2">Click to view certificate</p>}
