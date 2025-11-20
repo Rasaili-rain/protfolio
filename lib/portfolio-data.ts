@@ -148,7 +148,7 @@ export const navigationItems = [
 ];
 
 export const footerInfo = {
-  name: "Sadit.Dev",
+  name: "Sadit Rasaili",
   tagline: "Full stack developer passionate about building amazing products",
   year: new Date().getFullYear(),
 };

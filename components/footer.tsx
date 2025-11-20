@@ -15,7 +15,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="text-center md:text-left">
-            <a href="#" className="font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
+            <a href="#" className="font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
               {footerInfo.name}
             </a>
             <p className="text-sm text-muted-foreground mt-2">{footerInfo.tagline}</p>

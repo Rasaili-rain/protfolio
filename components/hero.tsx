@@ -107,8 +107,8 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer" onClick={handleViewWork}>
+        {/* Scroll Indicator */} 
+         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer" onClick={handleViewWork}>
           <ArrowDown className="w-6 h-6 text-muted-foreground hover:text-accent transition-colors" />
         </div>
       </div>
