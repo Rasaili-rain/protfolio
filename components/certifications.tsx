@@ -91,7 +91,7 @@ export default function Certifications() {
   return (
     <>
       <style>{styles}</style>
-      <section id="certifications" className="py-32 relative overflow-hidden bg-gradient-to-b from-zinc-950 to-zinc-950/50">
+      <section id="certifications" className="py-32 relative overflow-hidden">
         {/* Background effects */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
@@ -114,7 +114,6 @@ export default function Certifications() {
           </div>
 
           {/* Certifications Grid */}
-          {/* <div className="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-6"> */}
           <div className="max-w-6xl mx-auto flex flex-wrap justify-center items-center gap-6">
             {certifications.map((cert, index) => {
               const hasImages = cert.images && cert.images.length > 0;
@@ -125,7 +124,7 @@ export default function Certifications() {
                 <div
                   key={index}
                   onClick={() => hasImages && handleCertClick(cert)}
-                  className={`group relative w-64 h-55 animate-fade-in-up ${hasImages ? "cursor-pointer" : "cursor-default"}`}
+                  className={`group relative w-64 h-56 animate-fade-in-up ${hasImages ? "cursor-pointer" : "cursor-default"}`}
                   style={{ animationDelay: `${index * 0.08}s`, animationFillMode: "both" }}
                 >
                   {/* Hover glow effect */}
@@ -174,4 +173,4 @@ export default function Certifications() {
       {selectedCert && <ImageLightbox images={selectedCert.images} alt={selectedCert.name} isOpen={true} onClose={handleCloseLightbox} />}
     </>
   );
-}
+} 

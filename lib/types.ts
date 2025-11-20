@@ -1,3 +1,12 @@
+export interface HeroInfo {
+  name:string,
+  title:string,
+  subtitle:string,
+  imageLink?:string,
+  bio:string,
+  resumeUrl:string,
+};
+
 export interface Project {
   id: number;
   title: string;
@@ -10,11 +19,11 @@ export interface Project {
   featured: boolean;
 }
 
-
 export interface ContactInfo {
   email: string;
   phone: string;
   location: string;
+  location_link?: string;
   bio: string;
 }
 
@@ -23,7 +32,7 @@ export interface Certification {
   issuer: string;
   year: number;
   images?: string[];
-  link? :string;
+  link?: string;
 }
 
 export interface EducationItem {

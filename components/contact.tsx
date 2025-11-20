@@ -2,7 +2,7 @@
 
 import type React from "react";
 import { useState } from "react";
-import { Mail, Phone, MapPin, Github, Linkedin, Send, Sparkles, CheckCircle2, AlertCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Github, Linkedin, Send, CheckCircle2, AlertCircle, Contact2Icon } from "lucide-react";
 import { contactInfo, socialLinks } from "@/lib/portfolio-data";
 
 const socialIcons: Record<string, React.ReactNode> = {
@@ -18,16 +18,63 @@ export default function Contact() {
     subject: "",
     message: "",
   });
+
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormState((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" })); // Clear error on input
+  };
+
+  // Validation function
+  const validate = () => {
+    const newErrors: typeof errors = { name: "", email: "", subject: "", message: "" };
+    let isValid = true;
+
+    if (!formState.name.trim()) {
+      newErrors.name = "Name is required";
+      isValid = false;
+    } else if (formState.name.trim().length < 2) {
+      newErrors.name = "Name must be at least 2 characters";
+      isValid = false;
+    }
+
+    if (!formState.email.trim()) {
+      newErrors.email = "Email is required";
+      isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email)) {
+      newErrors.email = "Invalid email address";
+      isValid = false;
+    }
+
+    if (!formState.subject.trim()) {
+      newErrors.subject = "Subject is required";
+      isValid = false;
+    }
+
+    if (!formState.message.trim()) {
+      newErrors.message = "Message is required";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validate()) return;
+
     setIsSubmitting(true);
     setSubmitStatus("idle");
 
@@ -64,27 +111,22 @@ export default function Contact() {
         {/* Section Header */}
         <div className="text-center mb-20">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-sm text-purple-400 mb-6">
-            <Sparkles className="w-4 h-4" />
+            <Contact2Icon className="w-4 h-4" />
             Get In Touch
           </div>
-          
+
           <h2 className="text-4xl lg:text-6xl font-bold mb-6">
             Let's Work <span className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">Together</span>
           </h2>
-          
-          <p className="text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-            {contactInfo.bio}
-          </p>
+
+          <p className="text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">{contactInfo.bio}</p>
         </div>
 
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Contact Info Cards */}
             <div className="space-y-6">
-              <a
-                href={`mailto:${contactInfo.email}`}
-                className="group block"
-              >
+              <a href={`mailto:${contactInfo.email}`} className="group block">
                 <div className="relative bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 rounded-2xl p-6 hover:border-cyan-500/50 transition-all hover:shadow-lg hover:shadow-cyan-500/10">
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-10 blur transition-all duration-300" />
                   <div className="relative">
@@ -92,17 +134,12 @@ export default function Contact() {
                       <Mail className="w-6 h-6 text-cyan-400" />
                     </div>
                     <h3 className="font-semibold text-zinc-100 mb-2">Email</h3>
-                    <p className="text-sm text-zinc-400 group-hover:text-cyan-400 transition-colors break-all">
-                      {contactInfo.email}
-                    </p>
+                    <p className="text-sm text-zinc-400 group-hover:text-cyan-400 transition-colors break-all">{contactInfo.email}</p>
                   </div>
                 </div>
               </a>
 
-              <a
-                href={`tel:${contactInfo.phone}`}
-                className="group block"
-              >
+              <a href={`tel:${contactInfo.phone}`} className="group block">
                 <div className="relative bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 rounded-2xl p-6 hover:border-blue-500/50 transition-all hover:shadow-lg hover:shadow-blue-500/10">
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl opacity-0 group-hover:opacity-10 blur transition-all duration-300" />
                   <div className="relative">
@@ -110,26 +147,28 @@ export default function Contact() {
                       <Phone className="w-6 h-6 text-blue-400" />
                     </div>
                     <h3 className="font-semibold text-zinc-100 mb-2">Phone</h3>
-                    <p className="text-sm text-zinc-400 group-hover:text-blue-400 transition-colors">
-                      {contactInfo.phone}
-                    </p>
+                    <p className="text-sm text-zinc-400 group-hover:text-blue-400 transition-colors">{contactInfo.phone}</p>
                   </div>
                 </div>
               </a>
 
-              <div className="relative bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 rounded-2xl p-6">
-                <div className="w-12 h-12 bg-purple-500/10 border border-purple-500/20 rounded-xl flex items-center justify-center mb-4">
-                  <MapPin className="w-6 h-6 text-purple-400" />
+              <a href={contactInfo.location_link} target="_blank" rel="noopener noreferrer" className="group block">
+                <div className="relative bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 rounded-2xl p-6 hover:border-purple-500/50 transition-all hover:shadow-lg hover:shadow-purple-500/10">
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl opacity-0 group-hover:opacity-10 blur transition-all duration-300" />
+
+                  <div className="relative">
+                    <div className="w-12 h-12 bg-purple-500/10 border border-purple-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <MapPin className="w-6 h-6 text-purple-400" />
+                    </div>
+
+                    <h3 className="font-semibold text-zinc-100 mb-2">Location</h3>
+                    <p className="text-sm text-zinc-400 group-hover:text-purple-400 transition-colors">{contactInfo.location}</p>
+                  </div>
                 </div>
-                <h3 className="font-semibold text-zinc-100 mb-2">Location</h3>
-                <p className="text-sm text-zinc-400">{contactInfo.location}</p>
-              </div>
+              </a>
 
               {/* Social Links */}
               <div className="pt-4">
-                <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-4">
-                  Connect With Me
-                </h3>
                 <div className="flex gap-3">
                   {socialLinks.map((social) => (
                     <a
@@ -151,7 +190,6 @@ export default function Contact() {
             <div className="lg:col-span-2">
               <div className="relative bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 rounded-3xl p-8 lg:p-10">
                 <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-3xl opacity-0 hover:opacity-5 blur-xl transition-all duration-500" />
-                
                 <div className="relative">
                   <div className="mb-8">
                     <h3 className="text-2xl font-bold text-zinc-100 mb-2">Send a Message</h3>
@@ -160,6 +198,7 @@ export default function Contact() {
 
                   <div className="space-y-6">
                     <div className="grid md:grid-cols-2 gap-6">
+                      {/* Name */}
                       <div className="space-y-2">
                         <label htmlFor="name" className="text-sm font-medium text-zinc-300">
                           Full Name
@@ -171,11 +210,12 @@ export default function Contact() {
                           placeholder="John Doe"
                           value={formState.name}
                           onChange={handleChange}
-                          required
                           className="w-full px-4 py-3 bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-500 transition-all"
                         />
+                        {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name}</p>}
                       </div>
-                      
+
+                      {/* Email */}
                       <div className="space-y-2">
                         <label htmlFor="email" className="text-sm font-medium text-zinc-300">
                           Email Address
@@ -187,12 +227,13 @@ export default function Contact() {
                           placeholder="john@example.com"
                           value={formState.email}
                           onChange={handleChange}
-                          required
                           className="w-full px-4 py-3 bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-500 transition-all"
                         />
+                        {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
                       </div>
                     </div>
 
+                    {/* Subject */}
                     <div className="space-y-2">
                       <label htmlFor="subject" className="text-sm font-medium text-zinc-300">
                         Subject
@@ -204,11 +245,12 @@ export default function Contact() {
                         placeholder="Project inquiry / Collaboration opportunity"
                         value={formState.subject}
                         onChange={handleChange}
-                        required
                         className="w-full px-4 py-3 bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-500 transition-all"
                       />
+                      {errors.subject && <p className="text-red-400 text-sm mt-1">{errors.subject}</p>}
                     </div>
 
+                    {/* Message */}
                     <div className="space-y-2">
                       <label htmlFor="message" className="text-sm font-medium text-zinc-300">
                         Message
@@ -219,12 +261,13 @@ export default function Contact() {
                         placeholder="Tell me about your project or how we can work together..."
                         value={formState.message}
                         onChange={handleChange}
-                        required
                         rows={6}
                         className="w-full px-4 py-3 bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-500 transition-all resize-none"
                       />
+                      {errors.message && <p className="text-red-400 text-sm mt-1">{errors.message}</p>}
                     </div>
 
+                    {/* Submit Status Messages */}
                     {submitStatus === "success" && (
                       <div className="flex items-center gap-3 p-4 bg-green-500/10 border border-green-500/20 rounded-xl text-green-400">
                         <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
@@ -239,6 +282,7 @@ export default function Contact() {
                       </div>
                     )}
 
+                    {/* Submit Button */}
                     <button
                       onClick={handleSubmit}
                       disabled={isSubmitting}

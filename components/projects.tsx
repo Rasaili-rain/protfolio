@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles, ChevronLeft, ChevronRight, ExternalLink, Github, ZoomIn } from "lucide-react";
+import { ChevronLeft, ChevronRight, Code2, ExternalLink, Github, ZoomIn } from "lucide-react";
 import { projects } from "@/lib/portfolio-data";
 import { useState, useEffect } from "react";
 import ImageLightbox from "./image-lightbox";
@@ -106,8 +106,8 @@ export default function Projects() {
           {/* Section Header */}
           <div className="text-center mb-20">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-sm text-blue-400 mb-6">
-              <Sparkles className="w-4 h-4" />
-              Portfolio Showcase
+              <Code2 className="w-4 h-4" />
+              Projects Showcase
             </div>
 
             <h2 className="text-4xl lg:text-6xl font-bold mb-6">

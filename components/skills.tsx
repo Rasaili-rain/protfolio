@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { Code, Server, Brain, Zap, Database, Wrench, Monitor, Sparkles } from "lucide-react";
+import { Code, Server, Brain, Zap, Database, Wrench, Monitor, Lightbulb, BookOpenCheck} from "lucide-react";
 import { skillCategories } from "@/lib/portfolio-data";
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -27,7 +27,7 @@ export default function Skills() {
         {/* Section Header */}
         <div className="text-center mb-20">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-sm text-cyan-400 mb-6">
-            <Sparkles className="w-4 h-4" />
+            <Lightbulb className="w-4 h-4" />
             My Expertise
           </div>
 
@@ -78,7 +78,7 @@ export default function Skills() {
         <div className="mt-20 text-center">
           <div className="inline-flex flex-col items-center gap-4 p-8 bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 rounded-2xl">
             <div className="w-16 h-16 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 rounded-2xl flex items-center justify-center">
-              <Sparkles className="w-8 h-8 text-cyan-400" />
+              <BookOpenCheck className="w-8 h-8 text-cyan-400" />
             </div>
             <div>
               <h3 className="text-2xl font-bold mb-2">Always Learning</h3>
