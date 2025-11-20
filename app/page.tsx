@@ -1,8 +1,9 @@
 import Hero from "@/components/hero";
 import Contact from "@/components/contact";
-import { Education, Certifications } from "@/components/education_and_certifications";
-import { Projects } from "@/components/projects";
+import  Projects from "@/components/projects";
 import Skills from "@/components/skills";
+import Certifications from "@/components/certifications";
+import Education from "@/components/education";
 
 export default function Home() {
   return (
@@ -16,4 +17,3 @@ export default function Home() {
     </>
   );
 }
-  

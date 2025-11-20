@@ -30,56 +30,44 @@ export default function Skills() {
             <Sparkles className="w-4 h-4" />
             My Expertise
           </div>
-          
+
           <h2 className="text-4xl lg:text-6xl font-bold mb-6">
             Skills & <span className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">Technologies</span>
           </h2>
-          
-          <p className="text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-            A comprehensive toolkit of modern technologies I use to build exceptional digital experiences
-          </p>
+
+          <p className="text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">A comprehensive toolkit of modern technologies I use to build exceptional digital experiences</p>
         </div>
 
-        {/* Skills Grid */}
-			<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 justify-center place-items-center">
-
+        <div className="flex flex-wrap justify-center gap-6 max-w-7xl mx-auto">
           {skillCategories.map((category, index) => (
-            <div
-              key={category.category}
-              className="group relative"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {/* Hover glow effect */}
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-10 blur transition-all duration-300" />
-              
-              <div className="relative bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 rounded-2xl p-8 hover:border-cyan-500/50 transition-all duration-300 h-full flex flex-col">
-                {/* Icon and Title */}
-                <div className="flex flex-col items-center text-center mb-6">
-                  <div className="w-14 h-14 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:border-cyan-500/40 transition-all">
-                    <div className="text-cyan-400">
-                      {iconMap[category.icon] || <Code className="w-6 h-6" />}
-                    </div>
-                  </div>
-                  
-                  <h3 className="text-xl font-bold text-zinc-100 mb-2 group-hover:text-cyan-400 transition-colors">
-                    {category.category}
-                  </h3>
-                  
-                  <p className="text-sm text-zinc-500 leading-relaxed">
-                    {category.description}
-                  </p>
-                </div>
+            <div key={category.category} className="flex-shrink-0 w-full sm:w-[calc(65%)] md:w-[calc(45%)] lg:w-[calc(30%)]">
+              <div className="group relative h-full" style={{ animationDelay: `${index * 0.1}s` }}>
+                {/* Hover glow effect */}
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500" />
 
-                {/* Skills Tags */}
-                <div className="flex flex-wrap gap-2 justify-center mt-auto">
-                  {category.skills.map((skill, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-1.5 bg-zinc-950 border border-zinc-800 rounded-lg text-sm text-zinc-300 hover:border-cyan-500/50 hover:text-cyan-400 hover:bg-zinc-900 transition-all cursor-default font-medium"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+                <div className="relative bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 hover:border-cyan-500/50 transition-all duration-300 h-full min-h-[400px] flex flex-col group-hover:transform group-hover:-translate-y-1">
+                  {/* Icon and Title */}
+                  <div className="flex flex-col items-center text-center mb-6">
+                    <div className="w-16 h-16 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:border-cyan-500/40 group-hover:shadow-lg group-hover:shadow-cyan-500/20 transition-all duration-300">
+                      <div className="text-cyan-400 group-hover:text-cyan-300 transition-colors">{iconMap[category.icon] || <Code className="w-6 h-6" />}</div>
+                    </div>
+
+                    <h3 className="text-xl font-bold text-zinc-100 mb-3 group-hover:text-cyan-400 transition-colors">{category.category}</h3>
+
+                    <p className="text-sm text-zinc-500 leading-relaxed group-hover:text-zinc-400 transition-colors h-[4.5rem] flex items-center">{category.description}</p>
+                  </div>
+
+                  {/* Skills Tags */}
+                  <div className="flex flex-wrap gap-2 justify-center mt-auto pt-4 border-t border-zinc-800/50">
+                    {category.skills.map((skill, i) => (
+                      <span
+                        key={i}
+                        className="px-3 py-1.5 bg-zinc-950/50 border border-zinc-800 rounded-lg text-xs text-zinc-400 hover:border-cyan-500/50 hover:text-cyan-400 hover:bg-zinc-900/50 hover:scale-105 transition-all cursor-default font-medium"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -94,9 +82,7 @@ export default function Skills() {
             </div>
             <div>
               <h3 className="text-2xl font-bold mb-2">Always Learning</h3>
-              <p className="text-zinc-400 max-w-md">
-                Continuously expanding my skillset and staying updated with the latest technologies
-              </p>
+              <p className="text-zinc-400 max-w-md">Continuously expanding my skillset and staying updated with the latest technologies</p>
             </div>
           </div>
         </div>

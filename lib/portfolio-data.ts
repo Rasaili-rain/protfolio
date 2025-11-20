@@ -150,7 +150,7 @@ export const navigationItems = [
 export const footerInfo = {
   name: "Sadit Rasaili",
   tagline: "Full stack developer passionate about building amazing products",
-  year: new Date().getFullYear(),
+  year: 2025,
 };
 
 export const certifications: Certification[] = [

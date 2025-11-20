@@ -36,9 +36,9 @@ export default function Hero() {
     document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleGetInTouch = () => {
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-  };
+  // const handleGetInTouch = () => {
+  //   document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+  // };
 
   const handleDownloadCV = () => {
     const link = document.createElement("a");
