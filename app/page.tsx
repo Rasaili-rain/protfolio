@@ -1,9 +1,7 @@
 import Hero from "@/components/hero";
-import Skills from "@/components/skills";
-import Projects from "@/components/projects";
-import Education from "@/components/education";
 import Contact from "@/components/contact";
-import Certifications from "@/components/certifications";
+import { Education, Certifications } from "@/components/education_and_certifications";
+import { Projects, Skills } from "@/components/skills_and_projects";
 
 export default function Home() {
   return (

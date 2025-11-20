@@ -17,7 +17,6 @@ const navIconMap: Record<string, React.ReactNode> = {
   Education: <BookOpen className="w-4 h-4" />,
   Certifications: <Award className="w-4 h-4"/>,
   Contact: <Mail className="w-4 h-4" />,
-  // Blog: <PenTool className="w-4 h-4" />,
 };
 
 export default function Navigation() {
@@ -28,7 +27,6 @@ export default function Navigation() {
     { name: "Education", href: "#education", icon: navIconMap["Education"] },
     { name: "Certifications", href: "#certifications", icon: navIconMap["Certifications"] },
     { name: "Contact", href: "#contact", icon: navIconMap["Contact"] },
-    // { name: "Blog", href: "#blog", icon: navIconMap["Blog"] },
   ];
 
   const [isOpen, setIsOpen] = useState(false);

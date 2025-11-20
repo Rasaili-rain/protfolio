@@ -1,11 +1,72 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import type React from "react";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ExternalLink, Github, ZoomIn, ChevronLeft, ChevronRight } from "lucide-react";
-import { projects as allProjects } from "@/lib/portfolio-data";
+import { projects, skillCategories } from "@/lib/portfolio-data";
+import { Code, Server, Brain, Zap, Database, Wrench, ChevronLeft, ChevronRight, ExternalLink, Github, ZoomIn } from "lucide-react";
+import { useState, useEffect } from "react";
 import ImageLightbox from "./image-lightbox";
+import { Button } from "./ui/button";
+
+const iconMap: Record<string, React.ReactNode> = {
+  Code: <Code className="w-5 h-5" />,
+  Server: <Server className="w-5 h-5" />,
+  Brain: <Brain className="w-5 h-5" />,
+  Zap: <Zap className="w-5 h-5" />,
+  Database: <Database className="w-5 h-5" />,
+  Wrench: <Wrench className="w-5 h-5" />,
+};
+
+export function Skills() {
+  return (
+    <section id="skills" className="py-24 relative">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="max-w-2xl mb-16 animate-fade-in">
+          <h2 className="text-4xl lg:text-5xl font-bold mb-4">
+            Skills & <span className="text-accent">Expertise</span>
+          </h2>
+          <p className="text-muted-foreground leading-relaxed">Technologies and tools I've mastered throughout my development journey.</p>
+        </div>
+
+        {/* Skills Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {skillCategories.map((category, index) => (
+            <Card
+              key={category.category}
+              className="group hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 hover:border-accent/50 bg-card/50 border-border/50 backdrop-blur-sm animate-float-up cursor-default"
+              style={{ animationDelay: `${index * 0.08}s` }}
+            >
+              <CardHeader>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <CardTitle className="text-lg group-hover:text-accent transition-colors">{category.category}</CardTitle>
+                    <CardDescription className="text-xs mt-1">{category.description}</CardDescription>
+                  </div>
+                  <div className="p-2 rounded-lg bg-accent/10 text-accent group-hover:bg-accent/20 transition-colors shrink-0">{iconMap[category.icon] || <Code className="w-5 h-5" />}</div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {category.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-3 py-1.5 text-xs rounded-full bg-accent/10 text-accent border border-accent/20 hover:bg-accent/20 hover:border-accent/40 transition-all cursor-default font-medium"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 
 const getTechColor = (tech: string): string => {
   const colors: Record<string, string> = {
@@ -31,7 +92,7 @@ const getTechColor = (tech: string): string => {
   return colors[tech] || "bg-accent/10 text-accent border-accent/20";
 };
 
-export default function Projects() {
+export function Projects() {
   const [expandedProjectId, setExpandedProjectId] = useState<number | null>(null);
   const [expandedImageIndex, setExpandedImageIndex] = useState(0);
   const [currentImageIndices, setCurrentImageIndices] = useState<Record<number, number>>({});
@@ -40,7 +101,7 @@ export default function Projects() {
     const interval = setInterval(() => {
       setCurrentImageIndices((prev) => {
         const updated = { ...prev };
-        for (const project of allProjects) {
+        for (const project of projects) {
           const projectImages = Array.isArray(project.images) ? project.images : [];
           if (projectImages.length > 1) {
             updated[project.id] = ((prev[project.id] || 0) + 1) % projectImages.length;
@@ -53,8 +114,8 @@ export default function Projects() {
     return () => clearInterval(interval);
   }, []);
 
-  const featured = allProjects.filter((p) => p.featured);
-  const other = allProjects.filter((p) => !p.featured);
+  const featured = projects.filter((p) => p.featured);
+  const other = projects.filter((p) => !p.featured);
 
   const handlePrevImage = (projectId: number, imageCount: number) => {
     setCurrentImageIndices((prev) => ({
@@ -70,7 +131,7 @@ export default function Projects() {
     }));
   };
 
-  const getProjectImages = (project: (typeof allProjects)[0]): string[] => {
+  const getProjectImages = (project: (typeof projects)[0]): string[] => {
     return Array.isArray(project.images) ? project.images : [];
   };
 
@@ -237,7 +298,7 @@ export default function Projects() {
       </section>
 
       <ImageLightbox
-        images={expandedProjectId ? getProjectImages(allProjects.find((p) => p.id === expandedProjectId)!) : []}
+        images={expandedProjectId ? getProjectImages(projects.find((p) => p.id === expandedProjectId)!) : []}
         alt="Project image"
         isOpen={expandedProjectId !== null}
         onClose={() => setExpandedProjectId(null)}
