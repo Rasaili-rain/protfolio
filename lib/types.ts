@@ -1,11 +1,11 @@
 export interface HeroInfo {
-  name:string,
-  title:string,
-  subtitle:string,
-  imageLink?:string,
-  bio:string,
-  resumeUrl:string,
-};
+  name: string;
+  title: string;
+  subtitle: string;
+  imageLink?: string;
+  bio: string;
+  resumeUrl: string;
+}
 
 export interface Project {
   id: number;
