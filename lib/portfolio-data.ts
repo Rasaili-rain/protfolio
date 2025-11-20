@@ -1,10 +1,10 @@
 import { Project, EducationItem, Certification, ContactInfo, SkillCategory, SocialLink, HeroInfo } from "./types";
 
-export const heroInfo:HeroInfo = {
+export const heroInfo: HeroInfo = {
   name: "Sadit Rasaili",
   title: "Full Stack Developer • ML Enthusiast",
   subtitle: "Building intelligent, high-performance systems.",
-  imageLink:"pp.jpg",
+  imageLink: "pp.jpg",
   bio: "I'm a Computer Engineering student passionate about crafting efficient full-stack solutions and exploring applied machine learning. I enjoy turning complex problems into elegant software.",
   resumeUrl: "cv-sadit.pdf",
 };
@@ -81,7 +81,6 @@ export const education: EducationItem[] = [
   },
 ];
 
-
 export const skillCategories: SkillCategory[] = [
   {
     category: "Programming Languages",
@@ -137,7 +136,7 @@ export const contactInfo: ContactInfo = {
   email: "saditrasaili063@gmail.com",
   phone: "+977 9763610010",
   location: "Suryabinak, Bhaktapur Nepal",
-  location_link:"https://maps.app.goo.gl/tAnWxsiqg6h9fboR7",
+  location_link: "https://maps.app.goo.gl/tAnWxsiqg6h9fboR7",
   bio: "Have a project in mind or want to collaborate? I'd love to hear from you. Reach out through any of the channels below.",
 };
 
@@ -180,11 +179,11 @@ export const certifications: Certification[] = [
     year: 2025,
     images: ["certifications/SADIT_RASAILI - Intro to SQL.png"],
   },
-    {
+  {
     name: "React Basic",
     issuer: "Hacker Rank",
     year: 2025,
     images: ["certifications/react-basic.png"],
-    link:"https://www.hackerrank.com/certificates/533c4a4aa6aa"
+    link: "https://www.hackerrank.com/certificates/533c4a4aa6aa",
   },
 ];
