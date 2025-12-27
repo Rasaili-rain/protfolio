@@ -2,7 +2,18 @@
 import { useRef, useEffect, useState } from "react";
 import type React from "react";
 import { ArrowRight, Code2, Download, Github, Linkedin, Mail, Telescope } from "lucide-react";
-import { heroInfo, socialLinks } from "@/lib/portfolio-data";
+import { HeroInfo } from "@/lib/types";
+import { socialLinks } from "@/lib/portfolio-data";
+
+
+export const heroInfo: HeroInfo = {
+  name: "Sadit Rasaili",
+  title: "Full Stack Developer • ML Enthusiast",
+  subtitle: "Building intelligent, high-performance systems.",
+  imageLink: "pp.jpg",
+  bio: "I'm a 3rd Computer Engineering student  based on Bhaktapur, Nepal passionate about crafting efficient full-stack solutions and exploring applied machine learning.",
+  resumeUrl: "cv-sadit.pdf",
+};
 
 const iconMap: Record<string, React.ReactNode> = {
   github: <Github className="w-5 h-5" />,
@@ -167,7 +178,7 @@ export default function Hero() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-zinc-950/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-5 hover:border-cyan-500/50 transition-all group/stat">
                       <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-1">
-                        {socialLinks.filter((l) => l.icon === "github")[0] ? "20+" : "15+"}
+                        10+
                       </div>
                       <div className="text-sm text-zinc-400">Projects Built</div>
                     </div>
@@ -209,22 +220,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes gradient {
-          0%,
-          100% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-        }
-        .animate-gradient {
-          background-size: 200% auto;
-          animation: gradient 3s ease infinite;
-        }
-      `}</style>
     </section>
   );
 }

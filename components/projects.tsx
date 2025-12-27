@@ -1,53 +1,63 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Code2, ExternalLink, Github, ZoomIn } from "lucide-react";
-import { projects } from "@/lib/portfolio-data";
+import { ChevronLeft, ChevronRight, ExternalLink, Github, ZoomIn } from "lucide-react";
 import { useState, useEffect } from "react";
 import ImageLightbox from "./image-lightbox";
+import { Project } from "@/lib/types";
 
-// Add keyframe animations to the component
-const styles = `
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes pulse-subtle {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.8;
-    }
-  }
-
-  .animate-fade-in-up {
-    animation: fade-in-up 0.6s ease-out;
-  }
-
-  .animate-fade-in {
-    animation: fade-in 0.4s ease-out;
-  }
-
-  .animate-pulse-subtle {
-    animation: pulse-subtle 2s ease-in-out infinite;
-  }
-`;
+export const projects: Project[] = [
+  {
+    id: 1,
+    title: "ImGrep",
+    description: "AI-powered image search engine",
+    longDescription: "Full-stack image search engine with a Python backend, Flutter frontend, and a custom ML model for visual similarity recognition. Enables searching by image instead of text.",
+    technologies: ["Python", "Flutter", "Machine Learning", "FastAPI"],
+    images: ["imgrep/1.png", "imgrep/2.png", "imgrep/3.png", "imgrep/4.png", "imgrep/5.png"],
+    github: "https://github.com/Rasaili-rain/imgrep",
+    featured: true,
+  },
+  {
+    id: 2,
+    title: "Lobic",
+    description: "Real-time music streaming and chat platform",
+    longDescription: "Music streaming and chat app that uses WebSockets for real-time interaction, allowing synchronized listening in lobbies. Built for performance and safety using Rust.",
+    technologies: ["Rust", "WebSockets", "TypeScript", "React"],
+    images: ["lobic/1.png", "lobic/2.jpeg", "lobic/3.jpeg"],
+    github: "https://github.com/Rasaili-rain/lobic",
+    featured: true,
+  },
+  {
+    id: 3,
+    title: "KUvent",
+    description: "Event management platform for university clubs",
+    longDescription: "Social platform designed to help university clubs list upcoming events, manage registrations, and notify students in real time.",
+    technologies: ["C++", "Qt", "httplib"],
+    images: [],
+    github: "https://github.com/Rasaili-rain/kuvent",
+    featured: false,
+  },
+  {
+    id: 4,
+    title: "Hajir_F",
+    description: "Student attendance tracking app",
+    longDescription: "A Flutter-based mobile app that simplifies classroom attendance tracking for students and teachers.",
+    technologies: ["Dart", "Flutter", "Firebase"],
+    images: [],
+    github: "https://github.com/Rasaili-rain/hajir_f",
+    featured: false,
+  },
+  {
+    id: 5,
+    title: "Dodgers (Hackathon Project)",
+    description: "Video calling platform using WebRTC",
+    longDescription: "Hackathon-built real-time video calling app supporting peer-to-peer communication with an Express + MongoDB backend and React frontend.",
+    technologies: ["WebRTC", "Express.js", "MongoDB", "React"],
+    images: [],
+    github: "https://github.com/Rasaili-rain/dodgers",
+    featured: false,
+  },
+];
 
 export default function Projects() {
   const [expandedProjectId, setExpandedProjectId] = useState<number | null>(null);
@@ -94,7 +104,6 @@ export default function Projects() {
 
   return (
     <>
-      <style>{styles}</style>
       <section id="projects" className="py-32 relative overflow-hidden">
         {/* Background effects */}
         <div className="absolute inset-0 -z-10">
@@ -105,10 +114,6 @@ export default function Projects() {
         <div className="container mx-auto px-6 lg:px-8">
           {/* Section Header */}
           <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-sm text-blue-400 mb-6">
-              <Code2 className="w-4 h-4" />
-              Projects Showcase
-            </div>
 
             <h2 className="text-4xl lg:text-6xl font-bold mb-6">
               Featured <span className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">Projects</span>

@@ -2,7 +2,7 @@
 
 import type React from "react";
 import { useState } from "react";
-import { Mail, Phone, MapPin, Github, Linkedin, Send, CheckCircle2, AlertCircle, Contact2Icon } from "lucide-react";
+import { Mail, Phone, MapPin, Github, Linkedin, Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { contactInfo, socialLinks } from "@/lib/portfolio-data";
 
 const socialIcons: Record<string, React.ReactNode> = {
@@ -110,11 +110,6 @@ export default function Contact() {
       <div className="container mx-auto px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-sm text-purple-400 mb-6">
-            <Contact2Icon className="w-4 h-4" />
-            Get In Touch
-          </div>
-
           <h2 className="text-4xl lg:text-6xl font-bold mb-6">
             Let's Work <span className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">Together</span>
           </h2>

@@ -1,5 +1,11 @@
-import { footerInfo, socialLinks } from "@/lib/portfolio-data";
+import { socialLinks } from "@/lib/portfolio-data";
 import { Heart } from "lucide-react";
+
+export const footerInfo = {
+  name: "Sadit Rasaili",
+  tagline: "Full stack developer passionate about building amazing products",
+  year: 2025,
+};
 
 export default function Footer() {
   const socialIcons: Record<string, string> = {

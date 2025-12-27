@@ -2,7 +2,8 @@
 
 import type React from "react";
 import { useState, useEffect } from "react";
-import { Menu, X, Code2, Briefcase, BookOpen, Mail, Home, Award } from "lucide-react";
+import { Menu, X, Code2, Briefcase, BookOpen, Mail, Home, Award, Github, Linkedin } from "lucide-react";
+import { socialLinks } from "@/lib/portfolio-data";
 
 interface NavLink {
   name: string;
@@ -62,12 +63,14 @@ export default function Navigation() {
     <nav className="fixed top-0 w-full z-50 bg-background/10 backdrop-blur-md border-b border-border/20 transition-all duration-300">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
+          {/* Logo */}
           <a href="#" className="flex items-center gap-2 font-bold text-lg text-accent">
             <Code2 className="w-5 h-5" />
             Sadit
           </a>
 
-          <div className="hidden md:flex items-center gap-1">
+          {/* Center Navigation */}
+          <div className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
             {navLinks.map((link) => (
               <button
                 key={link.name}
@@ -84,13 +87,32 @@ export default function Navigation() {
             ))}
           </div>
 
+          {/* Right Side - Social Links */}
+          <div className="hidden md:flex items-center gap-2">
+            {socialLinks.slice(0, 2).map((link) => (
+              <a
+                key={link.name}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-muted-foreground hover:text-accent hover:bg-muted/30 rounded-lg transition-all"
+                aria-label={link.name}
+              >
+                {link.icon === "github" && <Github className="w-5 h-5" />}
+                {link.icon === "linkedin" && <Linkedin className="w-5 h-5" />}
+              </a>
+            ))}
+          </div>
+
+          {/* Mobile Menu Button */}
           <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 hover:bg-muted rounded-lg">
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
 
+        {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden pb-4 space-y-1 animate-fade-in">
+          <div className="md:hidden pb-4 space-y-1">
             {navLinks.map((link) => (
               <button
                 key={link.name}
@@ -105,12 +127,26 @@ export default function Navigation() {
                 {link.name}
               </button>
             ))}
+            
+            {/* Social Links in Mobile Menu */}
+            <div className="flex items-center gap-2 px-4 pt-2 border-t border-border/20 mt-2">
+              {socialLinks.slice(0, 2).map((link) => (
+                <a
+                  key={link.name}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-accent hover:bg-muted rounded-lg transition-all flex-1"
+                >
+                  {link.icon === "github" && <Github className="w-4 h-4" />}
+                  {link.icon === "linkedin" && <Linkedin className="w-4 h-4" />}
+                  {link.name}
+                </a>
+              ))}
+            </div>
           </div>
         )}
       </div>
     </nav>
   );
 }
-
-
-
