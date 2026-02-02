@@ -2,8 +2,10 @@
 
 import type React from "react";
 import { useState, useEffect } from "react";
-import { Menu, X, Code2, Briefcase, BookOpen, Mail, Home, Award, Github, Linkedin } from "lucide-react";
+import { Menu, X, Code2, Briefcase, BookOpen, Mail, Home, Award, Github, Linkedin, Compass } from "lucide-react";
 import { socialLinks } from "@/lib/portfolio-data";
+import { useRouter, usePathname } from "next/navigation";
+
 
 interface NavLink {
   name: string;
@@ -12,26 +14,32 @@ interface NavLink {
 }
 
 const navIconMap: Record<string, React.ReactNode> = {
-  Home : <Home className="w-4 h-4"/>,
+  Home: <Home className="w-4 h-4" />,
   Skills: <Code2 className="w-4 h-4" />,
   Projects: <Briefcase className="w-4 h-4" />,
   Education: <BookOpen className="w-4 h-4" />,
-  Certifications: <Award className="w-4 h-4"/>,
+  Certifications: <Award className="w-4 h-4" />,
   Contact: <Mail className="w-4 h-4" />,
+  Adventures: <Compass className="w-4 h-4" />,
 };
 
 export default function Navigation() {
   const navLinks: NavLink[] = [
-    { name: "Home", href: "#home", icon: navIconMap["Home"] },
-    { name: "Skills", href: "#skills", icon: navIconMap["Skills"] },
-    { name: "Projects", href: "#projects", icon: navIconMap["Projects"] },
-    { name: "Education", href: "#education", icon: navIconMap["Education"] },
-    { name: "Certifications", href: "#certifications", icon: navIconMap["Certifications"] },
-    { name: "Contact", href: "#contact", icon: navIconMap["Contact"] },
+    { name: "Home", href: "/#home", icon: navIconMap["Home"] },
+    { name: "Skills", href: "/#skills", icon: navIconMap["Skills"] },
+    { name: "Projects", href: "/#projects", icon: navIconMap["Projects"] },
+    { name: "Education", href: "/#education", icon: navIconMap["Education"] },
+    { name: "Certifications", href: "/#certifications", icon: navIconMap["Certifications"] },
+    { name: "Contact", href: "/#contact", icon: navIconMap["Contact"] },
+    { name: "Adventures", href: "/#adventures", icon: navIconMap["Adventures"] },
   ];
+
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("skills");
+  const router = useRouter();
+  const pathname = usePathname();
+
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -46,7 +54,8 @@ export default function Navigation() {
     );
 
     navLinks.forEach((link) => {
-      const section = document.querySelector(link.href);
+      const sectionId = link.href.split("#")[1];
+      const section = document.getElementById(sectionId);
       if (section) observer.observe(section);
     });
 
@@ -55,9 +64,22 @@ export default function Navigation() {
 
   const handleNavClick = (href: string) => {
     setIsOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+
+    const [hash] = href.split("#");
+
+    if (pathname !== "/") {
+      router.push(href);
+
+      setTimeout(() => {
+        const el = document.getElementById(hash);
+        el?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } else {
+      const el = document.getElementById(hash);
+      el?.scrollIntoView({ behavior: "smooth" });
+    }
   };
+
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-background/10 backdrop-blur-md border-b border-border/20 transition-all duration-300">
@@ -127,7 +149,7 @@ export default function Navigation() {
                 {link.name}
               </button>
             ))}
-            
+
             {/* Social Links in Mobile Menu */}
             <div className="flex items-center gap-2 px-4 pt-2 border-t border-border/20 mt-2">
               {socialLinks.slice(0, 2).map((link) => (

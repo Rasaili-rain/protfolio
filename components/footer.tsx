@@ -1,5 +1,8 @@
+"use client";
+
 import { socialLinks } from "@/lib/portfolio-data";
 import { Heart } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export const footerInfo = {
   name: "Sadit Rasaili",
@@ -8,6 +11,11 @@ export const footerInfo = {
 };
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  const isAdventuresPage = pathname?.startsWith('/adventures');
+  if (isAdventuresPage) return null;
+
   const socialIcons: Record<string, string> = {
     github: "GitHub",
     linkedin: "LinkedIn",
@@ -46,3 +54,6 @@ export default function Footer() {
     </footer>
   );
 }
+
+
+
