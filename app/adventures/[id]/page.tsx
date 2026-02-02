@@ -1,10 +1,27 @@
 "use client";
 
-import { useState, use } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Menu, X, Calendar, Clock, Tag } from "lucide-react";
 import Link from "next/link";
-import ReactMarkdown from "react-markdown";
-import { adventures } from "@/lib/adventure-data";
+import { MDXRemote } from 'next-mdx-remote';
+import { useMDXComponents } from "@/mdx-components";
+
+interface Adventure {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  readTime: string;
+  tags: string[];
+}
+
+interface AdventureData {
+  adventure: Adventure;
+  allAdventures: Adventure[];
+  previous: Adventure | null;
+  next: Adventure | null;
+  mdxSource: any;
+}
 
 interface AdventurePageProps {
   params: Promise<{
@@ -14,16 +31,71 @@ interface AdventurePageProps {
 
 export default function AdventurePage({ params }: AdventurePageProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { id } = use(params);
+  const [adventureData, setAdventureData] = useState<AdventureData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [id, setId] = useState<string>("");
   
-  const currentAdventure = adventures.find((a) => a.id === id);
-  const currentIndex = adventures.findIndex((a) => a.id === id);
-  const prevAdventure = currentIndex > 0 ? adventures[currentIndex - 1] : null;
-  const nextAdventure = currentIndex < adventures.length - 1 ? adventures[currentIndex + 1] : null;
+  const components = useMDXComponents({});
 
-  if (!currentAdventure) {
-    return <div className="min-h-screen pt-24 text-center">Adventure not found</div>;
+  useEffect(() => {
+    params.then(p => setId(p.id));
+  }, [params]);
+
+  useEffect(() => {
+    if (!id) return;
+
+    async function loadAdventure() {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/adventures/${id}`);
+        
+        if (!response.ok) {
+          throw new Error('Adventure not found');
+        }
+        
+        const data = await response.json();
+        setAdventureData(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load adventure');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadAdventure();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-24 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="text-muted-foreground">Loading adventure...</p>
+        </div>
+      </div>
+    );
   }
+
+  if (error || !adventureData) {
+    return (
+      <div className="min-h-screen pt-24 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-2">Adventure Not Found</h1>
+          <p className="text-muted-foreground mb-6">{error || 'The adventure you\'re looking for doesn\'t exist.'}</p>
+          <Link
+            href="/#adventures"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-accent text-accent-foreground font-medium hover:bg-accent/90 transition-all"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            Back to Home
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const { adventure, allAdventures, previous, next, mdxSource } = adventureData;
 
   return (
     <div className="pt-16 min-h-screen">
@@ -46,23 +118,23 @@ export default function AdventurePage({ params }: AdventurePageProps) {
           </div>
 
           <nav className="flex-1 overflow-y-auto p-6 space-y-2">
-            {adventures.map((adventure) => (
+            {allAdventures.map((adv) => (
               <Link
-                key={adventure.id}
-                href={`/adventures/${adventure.id}`}
+                key={adv.id}
+                href={`/adventures/${adv.id}`}
                 className={`block p-3 rounded-lg transition-all ${
-                  adventure.id === currentAdventure.id
+                  adv.id === adventure.id
                     ? "bg-accent/10 border border-accent/50 text-accent"
                     : "hover:bg-muted border border-transparent"
                 }`}
               >
                 <h3 className="font-medium text-sm mb-1 line-clamp-2">
-                  {adventure.title}
+                  {adv.title}
                 </h3>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <span>{adventure.date}</span>
+                  <span>{adv.date}</span>
                   <span>•</span>
-                  <span>{adventure.readTime}</span>
+                  <span>{adv.readTime}</span>
                 </div>
               </Link>
             ))}
@@ -92,60 +164,62 @@ export default function AdventurePage({ params }: AdventurePageProps) {
           <article className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
             {/* Back Link */}
             <Link
-              href="/adventures"
+              href="/#adventures"
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent mb-8 transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
-              Back to all adventures
+              Back to home
             </Link>
 
             {/* Article Header */}
             <header className="mb-12">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                {currentAdventure.title}
+                {adventure.title}
               </h1>
               
               <p className="text-xl text-muted-foreground mb-6">
-                {currentAdventure.description}
+                {adventure.description}
               </p>
 
               {/* Meta Info */}
               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  <span>{currentAdventure.date}</span>
+                  <span>{adventure.date}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
-                  <span>{currentAdventure.readTime}</span>
+                  <span>{adventure.readTime}</span>
                 </div>
               </div>
 
               {/* Tags */}
-              <div className="flex items-center gap-2 flex-wrap">
-                <Tag className="w-4 h-4 text-muted-foreground" />
-                {currentAdventure.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 text-sm rounded-full bg-accent/10 text-accent"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              {adventure.tags && adventure.tags.length > 0 && (
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Tag className="w-4 h-4 text-muted-foreground" />
+                  {adventure.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 text-sm rounded-full bg-accent/10 text-accent"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </header>
 
-            {/* Article Content */}
+            {/* Article Content - MDX */}
             <div className="prose prose-lg dark:prose-invert max-w-none">
-              <ReactMarkdown>{currentAdventure.content}</ReactMarkdown>
+              <MDXRemote {...mdxSource} components={components} />
             </div>
 
             {/* Navigation Footer */}
             <footer className="mt-16 pt-8 border-t border-border/50">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {prevAdventure && (
+                {previous && (
                   <Link
-                    href={`/adventures/${prevAdventure.id}`}
+                    href={`/adventures/${previous.id}`}
                     className="group p-6 rounded-xl border border-border/50 hover:border-accent/50 hover:bg-card/50 transition-all"
                   >
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
@@ -153,14 +227,14 @@ export default function AdventurePage({ params }: AdventurePageProps) {
                       <span>Previous</span>
                     </div>
                     <h3 className="font-semibold group-hover:text-accent transition-colors">
-                      {prevAdventure.title}
+                      {previous.title}
                     </h3>
                   </Link>
                 )}
                 
-                {nextAdventure && (
+                {next && (
                   <Link
-                    href={`/adventures/${nextAdventure.id}`}
+                    href={`/adventures/${next.id}`}
                     className="group p-6 rounded-xl border border-border/50 hover:border-accent/50 hover:bg-card/50 transition-all md:text-right md:ml-auto"
                   >
                     <div className="flex items-center justify-end gap-2 text-sm text-muted-foreground mb-2">
@@ -168,7 +242,7 @@ export default function AdventurePage({ params }: AdventurePageProps) {
                       <ChevronRight className="w-4 h-4" />
                     </div>
                     <h3 className="font-semibold group-hover:text-accent transition-colors">
-                      {nextAdventure.title}
+                      {next.title}
                     </h3>
                   </Link>
                 )}

@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
+import nextMDX from "@next/mdx";
+
+const withMDX = nextMDX({
+  extension: /\.(md|mdx)$/,
+});
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  pageExtensions: ["ts", "tsx", "md", "mdx"],
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
 };
 
-export default nextConfig;
+export default withMDX(nextConfig);

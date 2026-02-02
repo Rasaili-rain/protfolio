@@ -1,0 +1,80 @@
+---
+title: "Building My First Next.js Blog"
+description: "A journey through setting up a modern blog with Next.js, MDX, and Tailwind CSS"
+date: "2024-01-15"
+readTime: "8 min read"
+tags: ["Next.js", "React", "MDX", "Tailwind"]
+published: true
+---
+
+# My First Next.js Adventure
+
+Welcome to my first coding adventure! Today, I'm sharing my experience building this very blog you're reading.
+
+## Why Next.js?
+
+I chose **Next.js** for several compelling reasons:
+
+- Server-side rendering for better SEO
+- Built-in routing system
+- Excellent developer experience
+- Great performance out of the box
+
+## Setting Up MDX
+
+MDX allows me to write markdown with React components embedded. Here's a simple example:
+
+```jsx
+export const Greeting = ({ name }) => <h1>Hello, {name}!</h1>
+
+<Greeting name="World" />
+```
+
+### The Benefits
+
+1. **Rich content**: Mix markdown with interactive components
+2. **Type safety**: Full TypeScript support
+3. **Flexibility**: Use any React component in your content
+
+## Code Highlighting
+
+The syntax highlighting works beautifully:
+
+```typescript
+interface Adventure {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  readTime: string;
+  tags: string[];
+}
+
+const loadAdventures = async (): Promise<Adventure[]> => {
+  const response = await fetch('/api/adventures');
+  return response.json();
+}
+```
+
+## Styling with Tailwind
+
+Tailwind CSS makes styling a breeze. I love how I can compose utilities:
+
+> "Utility-first CSS is a game-changer for rapid prototyping and maintaining consistency across your application."
+
+## What's Next?
+
+Here's my roadmap:
+
+- Add search functionality
+- Implement categories
+- Create an RSS feed
+- Add reading progress indicator
+
+## Conclusion
+
+Building this blog has been an incredible learning experience. The combination of Next.js, MDX, and Tailwind CSS provides a powerful and flexible foundation for content creation.
+
+---
+
+Thanks for reading! Feel free to check out the code on [GitHub](https://github.com/yourusername/your-blog).

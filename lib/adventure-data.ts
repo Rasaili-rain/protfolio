@@ -1,3 +1,5 @@
+// lib/adventure-data.ts
+
 export interface Adventure {
   id: string;
   title: string;
