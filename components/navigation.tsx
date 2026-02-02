@@ -65,20 +65,20 @@ export default function Navigation() {
   const handleNavClick = (href: string) => {
     setIsOpen(false);
 
-    const [hash] = href.split("#");
+    const sectionId = href.split("#")[1];
 
-    if (pathname !== "/") {
-      router.push(href);
-
-      setTimeout(() => {
-        const el = document.getElementById(hash);
-        el?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    } else {
-      const el = document.getElementById(hash);
-      el?.scrollIntoView({ behavior: "smooth" });
+    // If already on home → just scroll
+    if (pathname === "/") {
+      document
+        .getElementById(sectionId)
+        ?.scrollIntoView({ behavior: "smooth" });
+      return;
     }
+
+    // From another page → navigate with hash
+    router.push(`/#${sectionId}`);
   };
+
 
 
   return (

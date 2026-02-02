@@ -1,9 +1,9 @@
 ---
-title: "Adding Images & GIFs to My Next.js Blog"
+title: "Images GIfs and videos"
 description: "Using images, GIFs, and media components in MDX with Next.js"
 date: "2024-02-02"
 readTime: "6 min read"
-tags: ["Next.js", "MDX", "Images", "GIFs"]
+tags: ["Next.js", "MDX", "Images", "GIFs","Youtube"]
 published: true
 ---
 
@@ -34,19 +34,18 @@ For better performance and optimization:
 import Image from "next/image";
 
 <Image
-  src="/next.svg"
-  alt="Dashboard Preview"
-  width={1200}
-  height={630}
-  className="rounded-xl"
+  src="https://picsum.photos/seed/picsum/200/300"
+  alt="Unsplash demo"
+  width={200}
+  height={300}
 />
 ````
+
 <Image
-src="/next.svg"
-alt="Dashboard Preview"
-width={1200}
-height={630}
-className="rounded-xl"
+  src="https://picsum.photos/seed/picsum/200/300"
+  alt="Unsplash demo"
+  width={200}
+  height={300}
 />
 
 ---
@@ -57,6 +56,15 @@ className="rounded-xl"
 /boss-gatsby.gif
 Then reference them directly in MDX:
 ![Next.js Blog Setup](/boss-gatsby.gif)
+
+
+
+
+## Video !!
+by making a custom Youtube components we have youtube videoss which is just a iframe
+
+<Youtube url="https://youtu.be/dQw4w9WgXcQ?si=HgpDeGBeIp-Lhho-" title="Ahh goott you" />
+
 
 
 Thanks for reading!
