@@ -1,0 +1,62 @@
+---
+title: "Adding Images & GIFs to My Next.js Blog"
+description: "Using images, GIFs, and media components in MDX with Next.js"
+date: "2024-02-02"
+readTime: "6 min read"
+tags: ["Next.js", "MDX", "Images", "GIFs"]
+published: true
+---
+
+# Making My Blog Visual
+
+Text is powerful—but visuals make content **engaging**.  
+In this post, I’m showcasing how I use **images, GIFs, and media** inside my Next.js MDX blog.
+
+---
+
+## Using Static Images
+
+For normal images, I place files inside:
+public/next.svg
+
+Then reference them directly in MDX:
+![Next.js Blog Setup](/next.svg)
+Fast  
+SEO-friendly  
+Works perfectly with Next.js static optimization
+
+
+
+## Using Next.js `<Image />` Component
+For better performance and optimization:
+
+```tsx
+import Image from "next/image";
+
+<Image
+  src="/next.svg"
+  alt="Dashboard Preview"
+  width={1200}
+  height={630}
+  className="rounded-xl"
+/>
+````
+<Image
+src="/next.svg"
+alt="Dashboard Preview"
+width={1200}
+height={630}
+className="rounded-xl"
+/>
+
+---
+
+
+## GIfs
+
+/boss-gatsby.gif
+Then reference them directly in MDX:
+![Next.js Blog Setup](/boss-gatsby.gif)
+
+
+Thanks for reading!

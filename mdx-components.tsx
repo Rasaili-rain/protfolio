@@ -144,6 +144,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </span>
     ),
     
+     // Allow <Image /> directly inside MDX
+    Image: (props) => (
+      <span className="block my-8">
+        <Image {...props} />
+      </span>
+    ),
+
     ...components,
   };
 }
