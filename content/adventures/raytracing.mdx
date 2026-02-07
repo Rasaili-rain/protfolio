@@ -1,0 +1,208 @@
+---
+title: "Ray Tracing in One Weekend — Part 1"
+description: "Building a CPU ray tracer in C#, finishing Book 1 in a weekend, and preparing for a GPU compute shader port."
+date: "2026-02-07"
+readTime: "8 min read"
+tags: ["Raytracing", "C#", "Computer Graphics", "Unity", "Rendering"]
+published: true
+---
+
+# Ray Tracing in One Weekend — Part 1 (Actually in One Weekend)
+
+![Final Render](/raytracing/finalRender.png)
+
+I finished **Ray Tracing in One Weekend  Part 1** in an actual weekend.
+
+It started with frustration.
+
+The book uses `double X, Y, Z` everywhere.  
+I wanted to use `float` becuse thats what Systems.Numerics.Vector3 used.
+
+Precision loss? Maybe.  
+Real problem? The missing `f` postfix.
+
+```csharp
+var val = 1.0;  // double
+var val = 1.0f; // float
+````
+
+That tiny `f` cost me an embarrassing amount of debugging time.
+
+At one point, this line:
+
+```csharp
+var a = 0.5f * (unitDirection.Y + 1.0);
+```
+
+was silently mixing float and double.
+
+Nothing dramatic. Just enough to ruin the vibe.
+
+Once fixed — stability.
+
+---
+
+## First Image: Background Gradient
+
+The classic sky gradient:
+
+```csharp
+return (1.0f - a) * new Color(1, 1, 1)
+     + a * new Color(0.5f, 0.7f, 1.0f);
+```
+
+Simple lerp.
+Instant satisfaction.
+
+---
+
+## Adding the First Sphere
+
+Ray–sphere intersection was surprisingly clean.
+
+* Plug in quadratic formula
+* Check discriminant
+* Return closest valid `t`
+
+Boom — sphere.
+
+There was some “squishiness” at first.
+Turned out to be a typo in `viewportU`.
+
+Fixed that and geometry behaved again.
+
+---
+
+## Surface Normals
+
+Next step: surface normals.
+
+A vector pointing outward from the surface.
+Normalized to unit length.
+
+When I visualized normals as colors, the renderer leveled up instantly.
+It stopped looking flat. It had structure.
+![Surface Normal](/raytracing/noramlVectorSphere.png)
+
+---
+
+## Anti-Aliasing & Sampling
+
+Then came sampling.
+
+Multiple rays per pixel.
+Average the result.
+Smooth edges.
+
+Performance reality hit hard here.
+
+### High Quality Attempt
+
+* `imageWidth = 1200`
+* `samplesPerPixel = 80`
+
+Wayyy too slow.
+
+Terminal-staring slow.
+
+So I tuned it down to:
+
+### Practical Render
+
+* `imageWidth = 400`
+* `samplesPerPixel = 20`
+
+Still looks good.
+Doesn’t cook my CPU.
+
+Ray tracing scales pain exponentially.
+
+---
+
+## Vector 3 Nah Vec3 
+
+At some point I decided to make my own Vec3 out of double instead of 
+Numerics.Vector3 which used floats. Easy enough cause i only used a handful
+of the functionality. This was supossed to removed a bug where a horizontal streak of 
+different color apperead on the sphere, but it didnt.
+
+That bug was actually caused by implicit cast of a division of two ints to int not a double.
+Saying that aloud make it so obvious but i completly missed it.
+Similar stuff also caused a bug where the sphere was squished
+
+
+I also at some point made it so that i was writing colors as RGR , yes not RGB
+I instinctively imagined colors looked off because of int , float , double 
+shenanigans and didnt bother at the moment. But when i acedently found the typo and fixed it
+the difference was day and night
+
+
+
+---
+
+## Writing Pixels Directly to File
+
+Initially, I was piping pixel output to stdout and redirecting.
+
+Later, I refactored it so pixels are written directly to a file.
+
+Cleaner.
+Faster.
+Less hacky.
+
+Small architectural win.
+
+---
+
+
+
+## Materials & Recursion
+
+By the end of Part 1, I had:
+
+* Diffuse (Lambertian) materials
+* Metal reflections
+* Fuzzy metals
+* Dielectric (glass) material
+* Refraction via Snell’s Law
+* Total internal reflection
+* Schlick approximation
+* Recursive ray bouncing
+* Depth limits
+* Gamma correction
+* Random scene generation
+
+![Zoom](/raytracing/zoom.png)
+![blur](/raytracing/dof.png)
+
+
+---
+
+## What’s Next
+
+Before jumping into **Book 2** (BVH, acceleration structures, motion blur, textures, etc.), I’m planning to port this to **Unity using Compute Shaders**.
+
+Why?
+
+CPU ray tracing is educational.
+GPU ray tracing is power.
+
+The plan:
+
+* Reimplement the renderer in HLSL
+* Use Compute Buffers
+* Dispatch one thread per pixel
+* Compare CPU vs GPU performance
+* Understand the GPU pipeline deeply
+
+Then dive into BVH properly.
+
+---
+
+This weekend wasn’t just about finishing a book.
+
+It was about building a renderer from scratch —
+with reflections, refractions, recursion, and anti-aliasing.
+
+Now we take it to the GPU.
+
