@@ -83,8 +83,19 @@ export const projects: Project[] = [
 
     ],
     github: "https://github.com/Rasaili-rain/KUSM",
-    link : "https://kusm-fend.vercel.app/",
+    link: "https://kusm-fend.vercel.app/",
     featured: true,
+  },
+  {
+    id: 7,
+    title: "Trippy",
+    description: "A travel expense splitter app",
+    longDescription: "Trippy is a A travel expense splitter app",
+    technologies: ["Next JS", "APIs", "REST"],
+    images: [],
+    github: "https://github.com/Rasaili-rain/trippy",
+    link:"https://trippy-orcin.vercel.app/",
+    featured: false,
   }
 ];
 
