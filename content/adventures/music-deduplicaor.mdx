@@ -1,0 +1,439 @@
+---
+title: "Music De duplicator"
+description: "Building a simple utility to remove duplicated / unwanted / corrupted music files."
+date: "2026-02-24"
+readTime: "3 min read"
+tags: ["rust","music", "utility", "mp3","id3"]
+published: true
+---
+
+# Music De duplicator
+
+
+https://github.com/Rasaili-rain/muiscDeduplicator
+
+I wanna be able to remove all the duplicate songs from my phone
+For a change lets do it in rust for old times sake.
+
+step 1 : cargo add walkdir
+
+step 2 : cargo add id3
+
+step 3 : copy paste from the id3 documentation
+```rust
+if let Ok(tag) = Tag::read_from_path(path) {
+	let music = Music {
+		artist: tag.artist().unwrap_or("unknown artist").to_string(),
+		title: tag.title().unwrap_or("unknown title").to_string(),
+		album: tag.album().unwrap_or("unknown album").to_string(),
+	};
+```
+
+
+Next we make a struct 
+```rust
+struct Music {
+    artist: String,
+    title: String,
+    album: String,
+    path: PathBuf,
+}
+```
+so that it is easier to pass around the music
+
+
+Now i wanna make a hashmap of the music to count
+``` rust 
+let mut music_count: HashMap<Music, usize> = HashMap::new();
+
+*music_count.entry(music).or_insert(0) += 1;
+
+```
+
+
+but as you might expect for this to work propely we need to remove the pathBuf from the Music struct. As if the path were to stay there would never be a hashMap Collison
+
+to solve this lets take a step back and remove the path from te Music struct
+
+but losing the path would really suck so instead of makina a path a part of the key in a hashmap , lets make multiple paths values of the hashmap
+
+like so
+```rust
+let mut music_map: HashMap<Music, Vec<PathBuf>> = HashMap::new();
+```
+
+and we can populate the map as so
+```rust
+music_map
+    .entry(music)
+    .or_insert_with(Vec::new)
+    .push(path.to_path_buf());
+```
+
+```console
+artist=Mantra title=Timi Nai Hau album=Rock Yatra path=music\Nepali rock song\Timi Nai Hau.mp3
+artist=Cobweb title=Timro Maya album=Cob Web - Swing path=music\Nepali rock song\Timro Maya.mp3
+artist=Karma Band title=Yani Maya album=Very Best of Karma path=music\Nepali rock song\Yani Maya.mp3
+No ID3 tag found: music\neww\ [-2C_P2N0LA8].mka
+No ID3 tag found: music\neww\ [-vriWOM7EPI].mka
+No ID3 tag found: music\neww\ [-xoxu1zHiSY].mka
+No ID3 tag found: music\neww\ [1oK6uqHd8tU].mka
+No ID3 tag found: music\neww\ [26H76PJWnmA].mka
+No ID3 tag found: music\neww\ [34Na4j8AVgA].mka
+No ID3 tag found: music\neww\ [3mO_uYWqnFg].mka
+No ID3 tag found: music\neww\ [3yq-NFiEywo].mka
+No ID3 tag found: music\neww\ [4whD6uAryMs].mka
+
+```
+
+
+the ouput at the curent state looks lik this
+woosh thats a lot of music files with no id3 data
+I wonder what should i do with them 
+
+at the moment i have around 1781 music files in my phone, ie 11.60 GB worth of music , ie 1781 * 5 minutes = 6.18402778 days of non stop listening
+
+the way things are with my attention span i cannot wait for 2-3 seconds to listen to music to listen to whole music
+
+I need the cover art to listen to any music
+
+A music not having the album name , artist name , title (id3) data is almost guarentted to not have the cover art
+
+
+SO WE NUKE EM
+
+all of em
+
+but lets wait untill things are more developed 
+
+```rust
+// match fs::remove_file(path) {
+//     Ok(_) => println!("File deleted successfully."),
+//     Err(e) => eprintln!("Failed to delete file: {}", e),
+// }
+println!("NUKING No ID3 tag found: {}", path.display());
+```
+
+
+NOw i think about it we should probably also
+```rust 
+if music.artist == "unknown artist"
+	|| music.title == "unknown title"
+	|| music.album == "unknown album"
+{
+	//NUK THESE TOO
+	// match fs::remove_file(path) {
+	//     Ok(_) => println!("File deleted successfully."),
+	//     Err(e) => eprintln!("Failed to delete file: {}", e),
+	// }
+	println!("NUKING No ID3 tag found: {} ", path.display());
+}
+```
+now as we have the map of the music with the path
+
+we can simplu iterate over them adn find the duplicated based on the id3 datas as follows
+
+```rust
+for (music, paths) in &music_map {
+	if paths.len() > 1 {
+		println!(
+			"Duplicate song: {} - {} ({})",
+			music.artist, music.title, music.album
+		);
+
+		for path in paths {
+			println!("  Path: {}", path.display());
+		}
+	}
+}
+```
+```
+Duplicate song: Albatross - Timi Bhane (Jo Jas Sanga Sambandhit Chha)
+  Path: music\Nepali rock song\Timi Bhane.mp3
+  Path: music\This Is Albatross\Timi Bhane.mp3
+Duplicate song: Albatross - Nischal (Atti Bhayo)
+  Path: music\Nepali rock song\Nischal.mp3
+  Path: music\This Is Albatross\Nischal.mp3
+```
+
+As we have all the dulicates , here is another dilema
+which one to NUKE ??
+
+first i thought to inplement a fuzzy mather with the directory name and the music filename , then i thought to keep a record of the artists in a folder and proritizes the folder containing the songs from the same artist and nuke the other one
+
+But it seems too complicated and i am kinda sleepy so i will leave it at that 
+
+for now lets just delete the first one
+```rust 	
+match fs::remove_file(paths[0].clone()) {
+	Ok(_) => println!("File deleted successfully."),
+	Err(e) => eprintln!("Failed to delete file: {}", e),
+}
+
+```
+
+
+
+for now lets uncomment the code to delte stuff and see thing burn.
+
+before that a slight refactor 
+```rust 
+fn delete_file(path: &PathBuf) {
+    match fs::remove_file(path) {
+        Ok(_) => println!("File deleted successfully: {}", path.display()),
+        Err(e) => eprintln!("Failed to delete file {}: {}", path.display(), e),
+    }
+}
+```
+
+``` before
+rain@/mnt/d/p/muiscDeduplicator:tree music
+music
+├── Nepali rock song
+│   ├── Aakash.mp3
+│   ├── Aatma.mp3
+│   ├── Bir Gorkhali.mp3     
+│   ├── Ekantama.mp3
+│   ├── Hukka Mero.mp3       
+│   ├── Jiven Mero.mp3       
+│   ├── Jiwan Hamro.mp3      
+│   ├── Kaha Hola Ghar.mp3   
+│   ├── Maryo Ni Maryo Ni.mp3
+│   ├── Mayalule Mayalule.mp3
+│   ├── Mayalu.mp3
+│   ├── Mercedes Benz.mp3    
+│   ├── Muskan.mp3
+│   ├── Nahera Malai.mp3     
+│   ├── Nasamjha.mp3
+│   ├── Nischal.mp3
+│   ├── Sadhai Sadhai.mp3    
+│   ├── Samjhi Baschu.mp3    
+│   ├── Sanskriti.mp3     
+│   ├── Sapana.mp3        
+│   ├── Syndicate.mp3     
+│   ├── Timi Bhane.mp3    
+│   ├── Timi Bina.mp3     
+│   ├── Timi Nai Hau.mp3  
+│   ├── Timro Maya.mp3    
+│   └── Yani Maya.mp3     
+├── neww
+│   ├──  [1oK6uqHd8tU].mka
+│   ├──  [26H76PJWnmA].mka
+│   ├──  [-2C_P2N0LA8].mka
+│   ├──  [34Na4j8AVgA].mka
+│   ├──  [3mO_uYWqnFg].mka
+│   ├──  [3yq-NFiEywo].mka
+│   ├──  [4whD6uAryMs].mka
+│   ├──  [5NV6Rdv1a3I].mka
+│   ├──  [8vX1v8eb7ms].mka
+│   ├──  [a5uQMwRMHcs].mka
+│   ├──  [cc96-nAqZus].mka
+│   ├──  [CqZgd6-xQl8].mka
+│   ├──  [CYKekR6661o].mka
+│   ├──  [D8K90hX4PrE].mka
+│   ├──  [DfSxHBYTOwg].mka
+│   ├──  [dKJfJMMsqX4].mka
+│   ├── Dracula [xnP7qKxwzjg].mka
+│   ├──  [DSaOvIaDQSw].mka
+│   ├──  [DuDX6wNfjqc].mka
+│   ├──  [E5xZf1unC84].mka
+│   ├──  [Ej8RhiSv2-4].mka
+│   ├──  [FGBhQbmPwH8].mka
+│   ├──  [gAjR4_CbPpQ].mka
+│   ├──  [h5Xp4v3bhO8].mka
+│   ├──  [HhZaHf8RP6g].mka
+│   ├──  [hI6T7ifrsG8].mka
+│   ├──  [HoQN7K6HdRw].mka
+│   ├──  [imBlPXbAv6E].mka
+│   ├──  [INmi-teOQLA].mka
+│   ├──  [IuwwuuvnvCs].mka
+│   ├──  [K0HSD_i2DvA].mka
+│   ├──  [k0optPS9qrA].mka
+│   ├──  [KUNcP1H7Wi4].mka
+│   ├──  [L93-7vRfxNs].mka
+│   ├──  [LeG3jPeeMec].mka
+│   ├──  [LL-gyhZVvx0].mka
+│   ├── Loser [MX7FSAnRPug].mka
+│   ├──  [lSD_L-xic9o].mka
+│   ├──  [lxdvyPzOv1w].mka
+│   ├── Make Love [xdovIDv6SHM].mka
+│   ├──  [mL6ejRs2Dgo].mka
+│   ├──  [NF-kLy44Hls].mka
+│   ├──  [nUF_NyG7-04].mka
+│   ├──  [o5yoW3YTXOM].mka
+│   ├──  [obLSGG-oEyw].mka
+│   ├──  [P1V6cQJpbc4].mka
+│   ├──  [PwILkY9gRrc].mka
+│   ├──  [q0fnqat88IQ].mka
+│   ├──  [qFLhGq0060w].mka
+│   ├──  [rfSkR3Rn8c4].mka
+│   ├──  [rI8gNmtpO6Q].mka
+│   ├──  [RldhR-Yu_W8].mka
+│   ├──  [sBvJUdBeY5s].mka
+│   ├──  [sFZjqVnWBhc].mka
+│   ├──  [sOS9aOIXPEk].mka
+│   ├──  [t-tBE53uoYc].mka
+│   ├──  [tyKu0uZS86Q].mka
+│   ├──  [UVevH51EYo0].mka
+│   ├──  [-vriWOM7EPI].mka
+│   ├──  [wbzJB36Z1F4].mka
+│   ├──  [WLa3JlGANuU].mka
+│   ├──  [-xoxu1zHiSY].mka
+│   ├──  [Xsn8fIqhk9w].mka
+│   ├──  [xWkuScCPHr4].mka
+│   ├──  [YiZfLvLU5Jc].mka
+│   ├──  [Yq6qkq_TWAM].mka
+│   ├──  [yZLfa7BT9nE].mka
+│   ├──  [zhl-Cs1-sG4].mka
+│   └──  [zs7u0qG9pNI].mka
+├── Swar Radio
+│   ├── Aparibhasit.mp3
+│   ├── Aunla Haru.mp3
+│   ├── Badal Sari.mp3
+│   ├── Bistarai.mp3
+│   ├── K Garu.mp3
+│   ├── Maili.mp3
+│   ├── Marijau2.mp3
+│   ├── Putali.mp3
+│   ├── Samaya Ley.mp3
+│   ├── Samjhanchu.mp3
+│   ├── Samjhine Mutu.mp3
+│   ├── Sansaar.mp3
+│   ├── Sathi.mp3
+│   ├── Timi Ra, Ma.mp3
+│   ├── Timro Lagi.mp3
+│   ├── Timro Yaad.mp3
+│   ├── udirahechan.mp3
+│   └── Yo Dil Mero.mp3
+└── This Is Albatross
+    ├── Abhimaan.mp3
+    ├── Abhiman - Lockdown.mp3
+    ├── Adhar.mp3
+    ├── Afnai Sansar Ma Kina.mp3
+    ├── Asha Nirasha.mp3
+    ├── Awaz.mp3
+    ├── Bachau.mp3
+    ├── Bhawana.mp3
+    ├── Bhool.mp3
+    ├── Chhaina.mp3
+    ├── Gari Khana Deu.mp3
+    ├── Intro - Ma Ra Malai.mp3
+    ├── Jhhari ko Raat.mp3
+    ├── Khaseka Tara.mp3
+    ├── Koshish.mp3
+    ├── Maa.mp3
+    ├── Nepali.mp3
+    ├── Nischal.mp3
+    ├── Raat Ko Rani.mp3
+    ├── Sagar.mp3
+    ├── Shristi ra Dristi.mp3
+    ├── Suchana! Suchana!! Suchana!!!.mp3
+    └── Timi Bhane.mp3
+
+5 directories, 136 files
+```
+
+
+``` after 
+rain@/mnt/d/p/muiscDeduplicator:tree music
+music
+├── Nepali rock song
+│   ├── Aakash.mp3
+│   ├── Aatma.mp3
+│   ├── Bir Gorkhali.mp3     
+│   ├── Ekantama.mp3
+│   ├── Hukka Mero.mp3       
+│   ├── Jiven Mero.mp3       
+│   ├── Jiwan Hamro.mp3      
+│   ├── Kaha Hola Ghar.mp3   
+│   ├── Maryo Ni Maryo Ni.mp3
+│   ├── Mayalule Mayalule.mp3
+│   ├── Mayalu.mp3
+│   ├── Mercedes Benz.mp3    
+│   ├── Muskan.mp3
+│   ├── Nahera Malai.mp3     
+│   ├── Nasamjha.mp3
+│   ├── Sadhai Sadhai.mp3    
+│   ├── Samjhi Baschu.mp3
+│   ├── Sanskriti.mp3
+│   ├── Sapana.mp3
+│   ├── Syndicate.mp3
+│   ├── Timi Bina.mp3
+│   ├── Timi Nai Hau.mp3
+│   ├── Timro Maya.mp3
+│   └── Yani Maya.mp3
+├── neww
+├── Swar Radio
+│   ├── Aparibhasit.mp3
+│   ├── Aunla Haru.mp3
+│   ├── Badal Sari.mp3
+│   ├── Bistarai.mp3
+│   ├── K Garu.mp3
+│   ├── Maili.mp3
+│   ├── Marijau2.mp3
+│   ├── Putali.mp3
+│   ├── Samaya Ley.mp3
+│   ├── Samjhanchu.mp3
+│   ├── Samjhine Mutu.mp3
+│   ├── Sansaar.mp3
+│   ├── Sathi.mp3
+│   ├── Timi Ra, Ma.mp3
+│   ├── Timro Lagi.mp3
+│   ├── Timro Yaad.mp3
+│   ├── udirahechan.mp3
+│   └── Yo Dil Mero.mp3
+└── This Is Albatross
+    ├── Abhimaan.mp3
+    ├── Abhiman - Lockdown.mp3
+    ├── Adhar.mp3
+    ├── Afnai Sansar Ma Kina.mp3
+    ├── Asha Nirasha.mp3
+    ├── Awaz.mp3
+    ├── Bachau.mp3
+    ├── Bhawana.mp3
+    ├── Bhool.mp3
+    ├── Chhaina.mp3
+    ├── Gari Khana Deu.mp3
+    ├── Intro - Ma Ra Malai.mp3
+    ├── Jhhari ko Raat.mp3
+    ├── Khaseka Tara.mp3
+    ├── Koshish.mp3
+    ├── Maa.mp3
+    ├── Nepali.mp3
+    ├── Nischal.mp3
+    ├── Raat Ko Rani.mp3
+    ├── Sagar.mp3
+    ├── Shristi ra Dristi.mp3
+    ├── Suchana! Suchana!! Suchana!!!.mp3
+    └── Timi Bhane.mp3
+
+5 directories, 65 files
+```
+
+
+wait a minute
+
+if i dont care which is delted when why bother , just delete in 1 pass no need 2 loops
+
+and with that all the duplicate music appear to be delted
+but there still remians the music which are not playable
+
+for that i found yet another package called symphonia
+
+and with a simple 
+```rust
+
+if !is_playable(path) {
+    if delete_file(&path.to_path_buf()) {
+        deleted_count += 1;
+    }
+    continue;
+}
+```
+wre got rid of all the unplayable music
+```console
+Running `target\debug\muiscDeduplicator.exe`
+Cleanup complete. Total deleted music files: 12
+```
+
+
