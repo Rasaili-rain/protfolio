@@ -1,6 +1,6 @@
 "use client";
 
-import { Award, ExternalLink, CheckCircle2} from "lucide-react";
+import { Award, ExternalLink, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 
 interface Certification {
@@ -87,11 +87,7 @@ export default function Certifications() {
               const hasLink = Boolean(cert.link);
 
               return (
-                <div
-                  key={index}
-                  onClick={() => hasImages && handleCertClick(cert)}
-                  className={`group relative ${hasImages ? "cursor-pointer" : ""}`}
-                >
+                <div key={index} onClick={() => hasImages && handleCertClick(cert)} className={`group relative ${hasImages ? "cursor-pointer" : ""}`}>
                   <div className="relative h-full bg-zinc-900/80 backdrop-blur-sm border border-zinc-800/80 rounded-lg overflow-hidden hover:border-cyan-500/30 transition-colors">
                     {/* Top accent */}
                     <div className="h-0.5 w-full bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 opacity-50" />
@@ -103,9 +99,7 @@ export default function Certifications() {
                           <Award className="w-5 h-5 text-cyan-400" />
                         </div>
 
-                        <span className="px-2 py-1 bg-zinc-950/60 border border-zinc-800 rounded-md text-xs font-medium text-zinc-400">
-                          {cert.year}
-                        </span>
+                        <span className="px-2 py-1 bg-zinc-950/60 border border-zinc-800 rounded-md text-xs font-medium text-zinc-400">{cert.year}</span>
                       </div>
 
                       {/* Content */}
@@ -113,9 +107,7 @@ export default function Certifications() {
                         <h3 className="font-semibold text-base text-zinc-100 mb-2 leading-tight line-clamp-2">{cert.name}</h3>
                         <div className="flex items-center gap-2 text-xs">
                           <CheckCircle2 className="w-3.5 h-3.5 text-green-500/70 flex-shrink-0" />
-                          <span className="text-zinc-400 truncate">
-                            {cert.issuer}
-                          </span>
+                          <span className="text-zinc-400 truncate">{cert.issuer}</span>
                           {hasLink && (
                             <ExternalLink
                               className="w-3.5 h-3.5 text-cyan-400/60 hover:text-cyan-400 transition-colors cursor-pointer ml-auto flex-shrink-0"
@@ -135,10 +127,7 @@ export default function Certifications() {
 
       {/* Simple Lightbox */}
       {selectedCert && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
-          onClick={handleCloseLightbox}
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4" onClick={handleCloseLightbox}>
           <div className="relative max-w-4xl w-full">
             <button
               onClick={handleCloseLightbox}
@@ -146,12 +135,7 @@ export default function Certifications() {
             >
               Close
             </button>
-            <img
-              src={selectedCert.images[0]}
-              alt={selectedCert.name}
-              className="w-full h-auto rounded-lg shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            />
+            <img src={selectedCert.images[0]} alt={selectedCert.name} className="w-full h-auto rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()} />
           </div>
         </div>
       )}

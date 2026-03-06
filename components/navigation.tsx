@@ -6,7 +6,6 @@ import { Menu, X, Code2, Briefcase, BookOpen, Mail, Home, Award, Github, Linkedi
 import { socialLinks } from "@/lib/portfolio-data";
 import { useRouter, usePathname } from "next/navigation";
 
-
 interface NavLink {
   name: string;
   href: string;
@@ -34,59 +33,54 @@ export default function Navigation() {
     { name: "Adventures", href: "/#adventures", icon: navIconMap["Adventures"] },
   ];
 
-
   const [isOpen, setIsOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState<string>("skills");
+  const [activeSection, setActiveSection] = useState<string>("home");
   const router = useRouter();
   const pathname = usePathname();
 
-
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { threshold: 0.4 }
-    );
+    const handleScroll = () => {
+      const sectionIds = navLinks.map((link) => link.href.split("#")[1]);
+      const scrollY = window.scrollY + window.innerHeight / 3;
 
-    navLinks.forEach((link) => {
-      const sectionId = link.href.split("#")[1];
-      const section = document.getElementById(sectionId);
-      if (section) observer.observe(section);
-    });
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const section = document.getElementById(sectionIds[i]);
+        if (section && section.offsetTop <= scrollY) {
+          setActiveSection(sectionIds[i]);
+          return;
+        }
+      }
+    };
 
-    return () => observer.disconnect();
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleNavClick = (href: string) => {
     setIsOpen(false);
-
     const sectionId = href.split("#")[1];
+    setActiveSection(sectionId);
 
-    // If already on home → just scroll
     if (pathname === "/") {
-      document
-        .getElementById(sectionId)
-        ?.scrollIntoView({ behavior: "smooth" });
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
       return;
     }
 
-    // From another page → navigate with hash
     router.push(`/#${sectionId}`);
   };
 
-
+  const isActive = (href: string) => {
+    const sectionId = href.split("#")[1];
+    return activeSection === sectionId;
+  };
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-background/10 backdrop-blur-md border-b border-border/20 transition-all duration-300">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2 font-bold text-lg text-accent">
+          <a href="/#home" className="flex items-center gap-2 font-bold text-lg text-accent">
             <Code2 className="w-5 h-5" />
             Sadit
           </a>
@@ -97,11 +91,8 @@ export default function Navigation() {
               <button
                 key={link.name}
                 onClick={() => handleNavClick(link.href)}
-                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 cursor-pointer group
-                  ${activeSection === link.href.replace("#", "")
-                    ? "text-accent bg-muted/50"
-                    : "text-muted-foreground hover:text-accent hover:bg-muted/30"
-                  }`}
+                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 cursor-pointer
+                  ${isActive(link.href) ? "text-accent bg-muted/50" : "text-muted-foreground hover:text-accent hover:bg-muted/30"}`}
               >
                 <span>{link.icon}</span>
                 {link.name}
@@ -140,10 +131,7 @@ export default function Navigation() {
                 key={link.name}
                 onClick={() => handleNavClick(link.href)}
                 className={`block w-full px-4 py-2 text-left text-sm font-medium rounded-lg flex items-center gap-2
-                  ${activeSection === link.href.replace("#", "")
-                    ? "text-accent bg-muted/50"
-                    : "text-muted-foreground hover:text-accent hover:bg-muted"
-                  }`}
+                  ${isActive(link.href) ? "text-accent bg-muted/50" : "text-muted-foreground hover:text-accent hover:bg-muted"}`}
               >
                 {link.icon}
                 {link.name}

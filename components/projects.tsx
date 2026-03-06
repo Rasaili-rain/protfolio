@@ -3,8 +3,18 @@
 import { ChevronLeft, ChevronRight, ExternalLink, Github, ZoomIn } from "lucide-react";
 import { useState, useEffect } from "react";
 import ImageLightbox from "./image-lightbox";
-import { Project } from "@/lib/types";
 
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  longDescription: string;
+  technologies: string[];
+  images: string[];
+  link?: string;
+  github?: string;
+  featured: boolean;
+}
 
 export const projects: Project[] = [
   {
@@ -61,27 +71,10 @@ export const projects: Project[] = [
     id: 6,
     title: "KUSM",
     description: "Real-time Smart Meter Monitoring & Analytics System",
-    longDescription: "Full-stack smart meter monitoring platform developed for Kathmandu University. Integrates IAMMETER API for real-time energy data collection, provides interactive dashboards for voltage, current, billing, and analytics, and includes a Random Forest ML model for 24-hour power consumption forecasting. Features role-based authentication, automated meter status monitoring, and email alerts for downtime.",
-    technologies: [
-      "FastAPI",
-      "React",
-      "TypeScript",
-      "PostgreSQL",
-      "Python",
-      "ML",
-      "JWT",
-      "SMTP",
-    ],
-    images: [
-      "kusm/dashboard.png",
-      "kusm/analysis.png",
-      "kusm/billing.png",
-      "kusm/prediction.png",
-      "kusm/map.png",
-      "kusm/adminDashboard.png",
-      "kusm/superAdminDashboard.png"
-
-    ],
+    longDescription:
+      "Full-stack smart meter monitoring platform developed for Kathmandu University. Integrates IAMMETER API for real-time energy data collection, provides interactive dashboards for voltage, current, billing, and analytics, and includes a Random Forest ML model for 24-hour power consumption forecasting. Features role-based authentication, automated meter status monitoring, and email alerts for downtime.",
+    technologies: ["FastAPI", "React", "TypeScript", "PostgreSQL", "Python", "ML", "JWT", "SMTP"],
+    images: ["kusm/dashboard.png", "kusm/analysis.png", "kusm/billing.png", "kusm/prediction.png", "kusm/map.png", "kusm/adminDashboard.png", "kusm/superAdminDashboard.png"],
     github: "https://github.com/Rasaili-rain/KUSM",
     link: "https://kusm-fend.vercel.app/",
     featured: true,
@@ -94,9 +87,9 @@ export const projects: Project[] = [
     technologies: ["Next JS", "APIs", "REST"],
     images: [],
     github: "https://github.com/Rasaili-rain/trippy",
-    link:"https://trippy-orcin.vercel.app/",
+    link: "https://trippy-orcin.vercel.app/",
     featured: false,
-  }
+  },
 ];
 
 export default function Projects() {
@@ -154,7 +147,6 @@ export default function Projects() {
         <div className="container mx-auto px-6 lg:px-8">
           {/* Section Header */}
           <div className="text-center mb-20">
-
             <h2 className="text-4xl lg:text-6xl font-bold mb-6">
               Featured <span className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">Projects</span>
             </h2>

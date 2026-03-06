@@ -1,4 +1,16 @@
-import {ContactInfo, SocialLink } from "./types";
+interface ContactInfo {
+  email: string;
+  phone: string;
+  location: string;
+  location_link?: string;
+  bio: string;
+}
+
+interface SocialLink {
+  name: string;
+  url: string;
+  icon: string;
+}
 
 export const socialLinks: SocialLink[] = [
   {
@@ -25,6 +37,3 @@ export const contactInfo: ContactInfo = {
   location_link: "https://maps.app.goo.gl/tAnWxsiqg6h9fboR7",
   bio: "Have a project in mind or want to collaborate? I'd love to hear from you. Reach out through any of the channels below.",
 };
-
-
-

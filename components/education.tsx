@@ -41,14 +41,13 @@ export default function Education() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
         {/* Section Header */}
-          <div className="text-center mb-20">
+        <div className="text-center mb-20">
+          <h2 className="text-4xl lg:text-6xl font-bold mb-6">
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">Education</span>
+          </h2>
 
-            <h2 className="text-4xl lg:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">Education</span>
-            </h2>
-
-            <p className="text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">My Academic Educations so far</p>
-          </div>
+          <p className="text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">My Academic Educations so far</p>
+        </div>
 
         {/* Timeline */}
         <div className="relative">
@@ -71,16 +70,12 @@ export default function Education() {
                       <GraduationCap className="w-4 h-4 text-cyan-400" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-base font-semibold text-zinc-100 leading-tight">
-                        {item.degree}
-                      </h3>
+                      <h3 className="text-base font-semibold text-zinc-100 leading-tight">{item.degree}</h3>
                     </div>
                   </div>
 
                   {/* Desktop title */}
-                  <h3 className="hidden md:block text-lg font-semibold text-zinc-100 mb-2">
-                    {item.degree}
-                  </h3>
+                  <h3 className="hidden md:block text-lg font-semibold text-zinc-100 mb-2">{item.degree}</h3>
 
                   {/* Info grid */}
                   <div className="space-y-1.5 mb-3 text-sm">

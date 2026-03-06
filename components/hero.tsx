@@ -1,19 +1,8 @@
 "use client";
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import type React from "react";
 import { ArrowRight, Code2, Download, Github, Linkedin, Mail, Telescope } from "lucide-react";
-import { HeroInfo } from "@/lib/types";
 import { socialLinks } from "@/lib/portfolio-data";
-
-
-export const heroInfo: HeroInfo = {
-  name: "Sadit Rasaili",
-  title: "Full Stack Developer • ML Enthusiast",
-  subtitle: "Building intelligent, high-performance systems.",
-  imageLink: "pp.jpg",
-  bio: "I'm a 3rd Computer Engineering student  based on Bhaktapur, Nepal passionate about crafting efficient full-stack solutions and exploring applied machine learning.",
-  resumeUrl: "cv-sadit.pdf",
-};
 
 const iconMap: Record<string, React.ReactNode> = {
   github: <Github className="w-5 h-5" />,
@@ -22,35 +11,15 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 export default function Hero() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        setMousePosition({
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top,
-        });
-      }
-    };
-
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener("mousemove", handleMouseMove);
-      return () => container.removeEventListener("mousemove", handleMouseMove);
-    }
-  }, []);
-
   const handleViewWork = () => {
     document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleDownloadCV = () => {
     const link = document.createElement("a");
-    link.href = heroInfo.resumeUrl;
-    link.download = heroInfo.name + ".pdf";
+    link.href = "cv-sadit.pdf";
+    link.download = "sadit_rasaili_cv.pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -84,12 +53,14 @@ export default function Hero() {
             <div className="space-y-6">
               <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
                 <span className="block text-zinc-100 mb-2">Hey, I'm</span>
-                <span className="block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent animate-gradient">{heroInfo.name}</span>
+                <span className="block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent animate-gradient">Sadit Rasaili</span>
               </h1>
 
               <div className="space-y-3">
-                <p className="text-2xl font-semibold text-zinc-300">{heroInfo.title}</p>
-                <p className="text-lg text-zinc-400 leading-relaxed max-w-xl">{heroInfo.bio}</p>
+                <p className="text-2xl font-semibold text-zinc-300">Full Stack Developer • ML Enthusiast</p>
+                <p className="text-lg text-zinc-400 leading-relaxed max-w-xl">
+                  I'm a 3rd year Computer Engineering student based on Bhaktapur, Nepal passionate about crafting efficient full-stack solutions and exploring applied machine learning.
+                </p>
               </div>
             </div>
 
@@ -136,14 +107,7 @@ export default function Hero() {
           {/* Visual Card */}
           <div className="relative">
             <div className="relative w-full max-w-lg mx-auto">
-              {/* Main card with mouse tracking effect */}
-              <div
-                className="relative bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-950 border border-zinc-800 rounded-3xl p-8 shadow-2xl overflow-hidden group"
-                style={{
-                  background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(6, 182, 212, 0.05), transparent 40%)`,
-                }}
-              >
-                {/* Accent border glow */}
+              <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-2xl space-y-8">
                 <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity blur-xl" />
 
                 <div className="relative z-10 space-y-8">
@@ -151,17 +115,7 @@ export default function Hero() {
                   <div className="flex items-center gap-4">
                     <div className="relative">
                       <div className="relative">
-                        {heroInfo.imageLink ? (
-                          <img src={heroInfo.imageLink} alt={heroInfo.name} className="w-20 h-20 object-cover rounded-2xl shadow-lg border border-zinc-800" />
-                        ) : (
-                          <div className="w-20 h-20 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl font-bold shadow-lg">
-                            {heroInfo.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
-                          </div>
-                        )}
-
+                        <img src={"pp.jpg"} alt={"sadit rasaili"} className="w-20 h-20 object-cover rounded-2xl shadow-lg border border-zinc-800" />
                         {/* Online status dot */}
                         <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-4 border-zinc-900" />
                       </div>
@@ -169,17 +123,15 @@ export default function Hero() {
                       <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-4 border-zinc-900" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-zinc-100">{heroInfo.name}</h3>
-                      <p className="text-sm text-zinc-400">{heroInfo.subtitle}</p>
+                      <h3 className="text-xl font-bold text-zinc-100">Sadit Rasaili</h3>
+                      <p className="text-sm text-zinc-400">Building intelligent, high-performance systems.</p>
                     </div>
                   </div>
 
                   {/* Stats grid */}
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-zinc-950/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-5 hover:border-cyan-500/50 transition-all group/stat">
-                      <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-1">
-                        10+
-                      </div>
+                      <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-1">10+</div>
                       <div className="text-sm text-zinc-400">Projects Built</div>
                     </div>
 
@@ -203,7 +155,7 @@ export default function Hero() {
                   <div className="space-y-3">
                     <div className="text-xs text-zinc-500 font-medium uppercase tracking-wider">Tech Stack</div>
                     <div className="flex flex-wrap gap-2">
-                      {["React", "Python", "Rust", "TypeScript", "Flutter"].map((tech) => (
+                      {["React", "Python", "Rust", "TypeScript", "Flutter", "Express", "postgresql"].map((tech) => (
                         <span key={tech} className="px-3 py-1.5 bg-zinc-950/50 border border-zinc-800 rounded-full text-xs text-zinc-300 hover:border-cyan-500/50 hover:text-cyan-400 transition-all">
                           {tech}
                         </span>
